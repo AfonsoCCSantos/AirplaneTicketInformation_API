@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+message Airline {
+    int32 id = 1;
+    string title = 2;
+}
+
+message AirlinesRankingByTicketPriceResponse {
+    repeated Airline airline;
+}
+
+service Ranking {
+    rpc GetAirlinesRankingByTicketPrice () returns (AirlinesByTicketPriceResponse);
+}

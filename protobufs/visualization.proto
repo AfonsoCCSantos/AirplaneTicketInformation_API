@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+message Ticket {
+    int32 id = 1;
+    string departure = 2;
+    string arrival = 3;
+    string date = 4;
+    float32 price = 5;
+    string airline_code = 6;
+}
+
+message Airline {
+    int32 id = 1;
+    string title = 2;
+}
+
+message TicketsRequest {
+    string departurePlace = 1;
+    string arrivalPlace = 2;
+}
+
+message TicketsResponse {
+    repeated Ticket tickets;
+}
+
+message AirlineRequest {
+    string airlineCode = 1;
+}
+
+message AirlineResponse {
+    Airline airline = 1;
+}
+
+service Visualization {
+    rpc GetTickets (TicketsRequest) returns (TicketsResponse);
+    rpc GetAirline (AirlineRequest) returns (AirlineResponse);
+}
