@@ -5,10 +5,14 @@ message Airline {
     string title = 2;
 }
 
+message AirlinesRankingByTicketPriceRequest {
+    
+}
+
 message AirlinesRankingByTicketPriceResponse {
-    repeated Airline airline;
+    repeated Airline airline = 1;
 }
 
 service Ranking {
-    rpc GetAirlinesRankingByTicketPrice () returns (AirlinesByTicketPriceResponse);
+    rpc GetAirlinesRankingByTicketPrice (AirlinesRankingByTicketPriceRequest) returns (AirlinesRankingByTicketPriceResponse);
 }

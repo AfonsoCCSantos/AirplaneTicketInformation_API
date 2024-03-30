@@ -5,7 +5,7 @@ message Ticket {
     string departure = 2;
     string arrival = 3;
     string date = 4;
-    float32 price = 5;
+    float price = 5;
     string airline_code = 6;
 }
 
@@ -20,7 +20,7 @@ message TicketsRequest {
 }
 
 message TicketsResponse {
-    repeated Ticket tickets;
+    repeated Ticket tickets = 1;
 }
 
 message AirlineRequest {
