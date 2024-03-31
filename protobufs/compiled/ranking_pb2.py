@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rranking.proto\"$\n\x07\x41irline\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\"%\n#AirlinesRankingByTicketPriceRequest\"A\n$AirlinesRankingByTicketPriceResponse\x12\x19\n\x07\x61irline\x18\x01 \x03(\x0b\x32\x08.Airline2y\n\x07Ranking\x12n\n\x1fGetAirlinesRankingByTicketPrice\x12$.AirlinesRankingByTicketPriceRequest\x1a%.AirlinesRankingByTicketPriceResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rranking.proto\"5\n\x07\x41irline\x12\x14\n\x0c\x61irline_code\x18\x01 \x01(\x05\x12\x14\n\x0c\x61irline_name\x18\x02 \x01(\t\"%\n#AirlinesRankingByTicketPriceRequest\"A\n$AirlinesRankingByTicketPriceResponse\x12\x19\n\x07\x61irline\x18\x01 \x03(\x0b\x32\x08.Airline2y\n\x07Ranking\x12n\n\x1fGetAirlinesRankingByTicketPrice\x12$.AirlinesRankingByTicketPriceRequest\x1a%.AirlinesRankingByTicketPriceResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -22,11 +22,11 @@ _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'ranking_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _globals['_AIRLINE']._serialized_start=17
-  _globals['_AIRLINE']._serialized_end=53
-  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_start=55
-  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_end=92
-  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_start=94
-  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_end=159
-  _globals['_RANKING']._serialized_start=161
-  _globals['_RANKING']._serialized_end=282
+  _globals['_AIRLINE']._serialized_end=70
+  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_start=72
+  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_end=109
+  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_start=111
+  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_end=176
+  _globals['_RANKING']._serialized_start=178
+  _globals['_RANKING']._serialized_end=299
 # @@protoc_insertion_point(module_scope)

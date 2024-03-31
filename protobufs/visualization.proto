@@ -1,22 +1,21 @@
 syntax = "proto3";
 
 message Ticket {
-    int32 id = 1;
-    string departure = 2;
-    string arrival = 3;
-    string date = 4;
-    float price = 5;
-    string airline_code = 6;
+    int32 leg_id = 1;
+    string departure_place = 2;
+    string arrival_place = 3;
+    string fligh_date = 4;
+    float total_fare = 5;
 }
 
 message Airline {
-    int32 id = 1;
-    string title = 2;
+    int32 airline_code = 1;
+    string airline_name = 2;
 }
 
 message TicketsRequest {
-    string departurePlace = 1;
-    string arrivalPlace = 2;
+    string departure_place = 1;
+    string arrival_place = 2;
 }
 
 message TicketsResponse {
@@ -24,7 +23,7 @@ message TicketsResponse {
 }
 
 message AirlineRequest {
-    string airlineCode = 1;
+    string airline_code = 1;
 }
 
 message AirlineResponse {
