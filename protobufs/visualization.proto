@@ -6,6 +6,10 @@ message Ticket {
     string arrival_place = 3;
     string flight_date = 4;
     float total_fare = 5;
+    string travel_duration = 6;
+    float total_travel_distance = 7;
+    bool is_refundable = 8;
+    bool is_non_stop = 9;
 }
 
 message Airline {

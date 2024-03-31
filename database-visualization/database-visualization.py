@@ -22,7 +22,8 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
         tickets = []
 
         query= f"""
-        SELECT legId, startingAirport, destinationAirport, CAST(flightDate AS STRING) AS date, totalFare
+        SELECT legId, startingAirport, destinationAirport, CAST(flightDate AS STRING) AS date,
+                     totalFare, travelDuration, totalTravelDistance, isRefundable, isNonStop
         FROM visualization.tickets t
         WHERE t.startingAirport='{departure_place}' AND t.destinationAirport='{arrival_place}'
         """
@@ -36,7 +37,11 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
                 departure_place = departure_place,
                 arrival_place = arrival_place,
                 flight_date = row.date,
-                total_fare = row.totalFare
+                total_fare = row.totalFare,
+                travel_duration = row.travelDuration,
+                total_travel_distance = row.totalTravelDistance,
+                is_refundable = row.isRefundable,
+                is_non_stop = row.isNonStop
             )
             tickets.append(ticket)
 
