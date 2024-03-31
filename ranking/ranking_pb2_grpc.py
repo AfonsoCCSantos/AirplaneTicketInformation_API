@@ -19,12 +19,23 @@ class RankingStub(object):
                 request_serializer=ranking__pb2.AirlinesRankingByTicketPriceRequest.SerializeToString,
                 response_deserializer=ranking__pb2.AirlinesRankingByTicketPriceResponse.FromString,
                 )
+        self.AddAirlinePrice = channel.unary_unary(
+                '/Ranking/AddAirlinePrice',
+                request_serializer=ranking__pb2.AirlinePrice.SerializeToString,
+                response_deserializer=ranking__pb2.AirlinePrice.FromString,
+                )
 
 
 class RankingServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GetAirlinesRankingByTicketPrice(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def AddAirlinePrice(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -37,6 +48,11 @@ def add_RankingServicer_to_server(servicer, server):
                     servicer.GetAirlinesRankingByTicketPrice,
                     request_deserializer=ranking__pb2.AirlinesRankingByTicketPriceRequest.FromString,
                     response_serializer=ranking__pb2.AirlinesRankingByTicketPriceResponse.SerializeToString,
+            ),
+            'AddAirlinePrice': grpc.unary_unary_rpc_method_handler(
+                    servicer.AddAirlinePrice,
+                    request_deserializer=ranking__pb2.AirlinePrice.FromString,
+                    response_serializer=ranking__pb2.AirlinePrice.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -62,5 +78,22 @@ class Ranking(object):
         return grpc.experimental.unary_unary(request, target, '/Ranking/GetAirlinesRankingByTicketPrice',
             ranking__pb2.AirlinesRankingByTicketPriceRequest.SerializeToString,
             ranking__pb2.AirlinesRankingByTicketPriceResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def AddAirlinePrice(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Ranking/AddAirlinePrice',
+            ranking__pb2.AirlinePrice.SerializeToString,
+            ranking__pb2.AirlinePrice.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -2,12 +2,12 @@ from flask import Flask
 import grpc
 import os
 
-from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, AirlineRankingRow
+from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlineAveragePrice
 from ranking_pb2_grpc import RankingStub
 
 app = Flask(__name__)
 
-# Connect to the database visualization service
+# Connect to the database ranking service
 database_ranking_host = os.getenv("DATABASE_RANKING_HOST", "localhost")
 database_ranking_channel = grpc.insecure_channel("localhost:50052")
 database_ranking_client = RankingStub(database_ranking_channel)

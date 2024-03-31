@@ -37,4 +37,5 @@ message AirlineResponse {
 service Visualization {
     rpc GetTickets (TicketsRequest) returns (TicketsResponse);
     rpc GetAirline (AirlineRequest) returns (AirlineResponse);
+    rpc AddTicket (Ticket) returns (Ticket);
 }

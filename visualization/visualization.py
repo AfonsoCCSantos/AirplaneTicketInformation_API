@@ -23,8 +23,6 @@ def get_tickets_from_to(departure, arrival):
 
     tickets_response = database_visualization_client.GetTickets(tickets_request)
 
-
-    
     return f"list of tickets: {tickets_response.tickets}"
 
 @app.route("/api/visualization/airlines/<airline_code>", methods=["GET"])

@@ -65,6 +65,25 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
         )
         
         return AirlineResponse(airline = airline)
+    
+    def AddTicket(self, request, context):
+        ticket = request.ticket
+
+        query = f"""
+            INSERT INTO 
+            visualization.tickets (legId, startingAirport, destinationAirport, flightDate, totalFare, 
+                                    travelDuration, totalTravelDistance, isRefundable, isNonStop)
+            VALUES 
+                ('{ticket.leg_id}', '{ticket.departure_place}', '{ticket.arrival_place}', '
+                    {ticket.flight_date}', {ticket.total_fare}, {ticket.travel_duration}, 
+                    {ticket.total_travel_distance}, {ticket.is_refundable}, {ticket.is_non_stop})
+        """
+
+        query_job = client.query(query)
+        results = query_job.result()
+
+        print(results)
+
 
 def serve():
     interceptors = [ExceptionToStatusInterceptor()]

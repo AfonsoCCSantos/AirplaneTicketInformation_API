@@ -6,7 +6,7 @@ from grpc_interceptor import ExceptionToStatusInterceptor
 from grpc_interceptor.exceptions import NotFound
 
 from ranking_pb2 import (
-    AirlineRankingRow,
+    AirlineAveragePrice,
     AirlinesRankingByTicketPriceResponse,
 )
 import ranking_pb2_grpc as ranking_pb2_grpc
@@ -31,7 +31,7 @@ class DatabaseRankingService(ranking_pb2_grpc.RankingServicer):
         
 
         for row in results:
-            airline = AirlineRankingRow(
+            airline = AirlineAveragePrice(
                 airline_code=row.airlineCode,
                 average_price=row.averagePrice
             )
