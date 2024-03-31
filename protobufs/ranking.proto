@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-message Airline {
+message AirlineRankingRow {
     string airline_code = 1;
-    string airline_name = 2;
+    float average_price = 2;
 }
 
 message AirlinesRankingByTicketPriceRequest {
@@ -10,7 +10,7 @@ message AirlinesRankingByTicketPriceRequest {
 }
 
 message AirlinesRankingByTicketPriceResponse {
-    repeated Airline airline = 1;
+    repeated AirlineRankingRow airlines = 1;
 }
 
 service Ranking {
