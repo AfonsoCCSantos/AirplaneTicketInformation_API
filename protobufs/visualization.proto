@@ -4,7 +4,7 @@ message Ticket {
     string leg_id = 1;
     string departure_place = 2;
     string arrival_place = 3;
-    string fligh_date = 4;
+    string flight_date = 4;
     float total_fare = 5;
 }
 

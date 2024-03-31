@@ -14,14 +14,18 @@ database_visualization_client = VisualizationStub(database_visualization_channel
 
 @app.route("/api/visualization/tickets/<departure>/<arrival>", methods=["GET"])
 def get_tickets_from_to(departure, arrival):
-    # tickets_request = TicketsRequest(
-    #     departure=departure,
-    #     arrival=arrival
-    # )
+    tickets_request = TicketsRequest(
+        departure_place=departure,
+        arrival_place=arrival
+    )
 
-    # tickets_response = database_visualization_client.GetTickets(tickets_request)
+    print(tickets_request)
+
+    tickets_response = database_visualization_client.GetTickets(tickets_request)
+
+
     
-    return "list of tickets"
+    return f"list of tickets: {tickets_response.tickets}"
 
 @app.route("/api/visualization/airlines/<airline_code>", methods=["GET"])
 def get_airline_details(airline_code):

@@ -22,22 +22,21 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
         tickets = []
 
         query= f"""
-        SELECT *
+        SELECT legId, startingAirport, destinationAirport, CAST(flightDate AS STRING) AS date, totalFare
         FROM visualization.tickets t
-        WHERE t.departurePlace='{departure_place}' AND t.arrivalPlace='{arrival_place}'
+        WHERE t.startingAirport='{departure_place}' AND t.destinationAirport='{arrival_place}'
         """
 
         query_job = client.query(query)
-        results = query_job.result()
+        results = list(query_job.result())
 
         for row in results:
             ticket = Ticket(
                 leg_id = row.legId,
                 departure_place = departure_place,
                 arrival_place = arrival_place,
-                flight_date = row.flightDate,
-                total_fare = row.totalFare,
-                airline_code = row.airlineCode             
+                flight_date = row.date,
+                total_fare = row.totalFare
             )
             tickets.append(ticket)
 
@@ -54,12 +53,6 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
 
         query_job = client.query(query)
         result = list(query_job.result())[0]
-
-        print()
-        print()
-        print(result)
-        print()
-        print()
 
         airline = Airline(
             airline_code = result.airlineCode,
