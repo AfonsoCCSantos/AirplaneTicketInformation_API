@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rranking.proto\"5\n\x07\x41irline\x12\x14\n\x0c\x61irline_code\x18\x01 \x01(\x05\x12\x14\n\x0c\x61irline_name\x18\x02 \x01(\t\"%\n#AirlinesRankingByTicketPriceRequest\"A\n$AirlinesRankingByTicketPriceResponse\x12\x19\n\x07\x61irline\x18\x01 \x03(\x0b\x32\x08.Airline2y\n\x07Ranking\x12n\n\x1fGetAirlinesRankingByTicketPrice\x12$.AirlinesRankingByTicketPriceRequest\x1a%.AirlinesRankingByTicketPriceResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rranking.proto\"5\n\x07\x41irline\x12\x14\n\x0c\x61irline_code\x18\x01 \x01(\t\x12\x14\n\x0c\x61irline_name\x18\x02 \x01(\t\"%\n#AirlinesRankingByTicketPriceRequest\"A\n$AirlinesRankingByTicketPriceResponse\x12\x19\n\x07\x61irline\x18\x01 \x03(\x0b\x32\x08.Airline2y\n\x07Ranking\x12n\n\x1fGetAirlinesRankingByTicketPrice\x12$.AirlinesRankingByTicketPriceRequest\x1a%.AirlinesRankingByTicketPriceResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)

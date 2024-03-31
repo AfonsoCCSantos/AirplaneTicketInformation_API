@@ -29,4 +29,4 @@ def get_airline_details(airline_code):
     
     airline_response = database_visualization_client.GetAirline(airline_request)
 
-    return f"airlineCode: {airline_response.airline_id} | airlineName: {airline_response.airline_name}"
+    return f"airlineCode: {airline_response.airline.airline_code} | airlineName: {airline_response.airline.airline_name}"

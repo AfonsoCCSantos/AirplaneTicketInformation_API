@@ -51,9 +51,15 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
             FROM visualization.airlines a
             WHERE a.airlineCode='{airline_code}'
         """
-        
+
         query_job = client.query(query)
-        result = query_job.result()
+        result = list(query_job.result())[0]
+
+        print()
+        print()
+        print(result)
+        print()
+        print()
 
         airline = Airline(
             airline_code = result.airlineCode,

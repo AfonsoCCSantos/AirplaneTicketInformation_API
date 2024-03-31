@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 message Airline {
-    int32 airline_code = 1;
+    string airline_code = 1;
     string airline_name = 2;
 }
 

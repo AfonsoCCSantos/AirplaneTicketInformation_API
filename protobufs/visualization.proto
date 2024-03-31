@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 message Ticket {
-    int32 leg_id = 1;
+    string leg_id = 1;
     string departure_place = 2;
     string arrival_place = 3;
     string fligh_date = 4;
@@ -9,7 +9,7 @@ message Ticket {
 }
 
 message Airline {
-    int32 airline_code = 1;
+    string airline_code = 1;
     string airline_name = 2;
 }
 
