@@ -12,7 +12,7 @@ database_visualization_host = os.getenv("DATABASE_VISUALIZATION_HOST", "localhos
 database_visualization_channel = grpc.insecure_channel("localhost:50051")
 database_visualization_client = VisualizationStub(database_visualization_channel)
 
-@app.route("/api/visualization/tickets/<departure>/<arrival>", method=["GET"])
+@app.route("/api/visualization/tickets/<departure>/<arrival>", methods=["GET"])
 def get_tickets_from_to(departure, arrival):
     # tickets_request = TicketsRequest(
     #     departure=departure,
@@ -23,7 +23,7 @@ def get_tickets_from_to(departure, arrival):
     
     return "list of tickets"
 
-@app.route("/api/visualization/airlines/<airline_code>", method=["GET"])
+@app.route("/api/visualization/airlines/<airline_code>", methods=["GET"])
 def get_airline_details(airline_code):
     airline_request = AirlineRequest(airline_code=airline_code)
     
