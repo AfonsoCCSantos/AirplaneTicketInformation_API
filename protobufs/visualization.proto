@@ -27,7 +27,7 @@ message VisualizationInsertionResponse {
 }
 
 message VisualizationDeleteRequest {
-    Ticket ticket = 1;
+    string leg_id = 1;
 }
 
 message VisualizationDeleteResponse {

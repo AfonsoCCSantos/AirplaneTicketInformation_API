@@ -29,6 +29,11 @@ class VisualizationStub(object):
                 request_serializer=visualization__pb2.VisualizationInsertionRequest.SerializeToString,
                 response_deserializer=visualization__pb2.VisualizationInsertionResponse.FromString,
                 )
+        self.DeleteTicket = channel.unary_unary(
+                '/Visualization/DeleteTicket',
+                request_serializer=visualization__pb2.VisualizationDeleteRequest.SerializeToString,
+                response_deserializer=visualization__pb2.VisualizationDeleteResponse.FromString,
+                )
 
 
 class VisualizationServicer(object):
@@ -52,6 +57,12 @@ class VisualizationServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeleteTicket(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_VisualizationServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -69,6 +80,11 @@ def add_VisualizationServicer_to_server(servicer, server):
                     servicer.AddTicket,
                     request_deserializer=visualization__pb2.VisualizationInsertionRequest.FromString,
                     response_serializer=visualization__pb2.VisualizationInsertionResponse.SerializeToString,
+            ),
+            'DeleteTicket': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteTicket,
+                    request_deserializer=visualization__pb2.VisualizationDeleteRequest.FromString,
+                    response_serializer=visualization__pb2.VisualizationDeleteResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -128,5 +144,22 @@ class Visualization(object):
         return grpc.experimental.unary_unary(request, target, '/Visualization/AddTicket',
             visualization__pb2.VisualizationInsertionRequest.SerializeToString,
             visualization__pb2.VisualizationInsertionResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteTicket(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Visualization/DeleteTicket',
+            visualization__pb2.VisualizationDeleteRequest.SerializeToString,
+            visualization__pb2.VisualizationDeleteResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

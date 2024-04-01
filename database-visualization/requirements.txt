@@ -1,5 +1,4 @@
 google-cloud-bigquery
 google-oauth2-tool
-protobufs
 grpc-interceptor ~= 0.11.0
 grpcio-tools ~= 1.30

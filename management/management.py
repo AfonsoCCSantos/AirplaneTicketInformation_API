@@ -2,7 +2,7 @@ from flask import Flask, request
 import grpc
 import os
 
-from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest
+from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, VisualizationDeleteRequest
 from visualization_pb2_grpc import VisualizationStub
 from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, AirlinePrice
 from ranking_pb2_grpc import RankingStub
@@ -22,8 +22,6 @@ database_ranking_client = RankingStub(database_ranking_channel)
 @app.route("/api/management/tickets", methods=['POST'])
 def add_tickets():
     request_body = request.json
-
-    print(request_body)
 
     ticket_body = request_body["ticket"]
     airlines_body = request_body["airlines"]
@@ -56,18 +54,14 @@ def add_tickets():
     # Add the ticket to the tickets database
     tickets_response = database_visualization_client.AddTicket(visualization_insertion_request)
 
-    print()
-    print(tickets_response)
-    print()
-
-    # Add the ticket to the ranking database
-    #ranking_response = database_ranking_client.AddAirlinePrice(airline_price)
-
     return "adds a new ticket"
 
-@app.route("/api/management/tickets/<ticketId>", methods=['DELETE'])
-def delete_ticket(ticketId):
+@app.route("/api/management/tickets/<leg_id>", methods=['DELETE'])
+def delete_ticket(leg_id):
     # Delete the ticket from the tickets database
     # tickets_response = database_visualization_client.DeleteTicket(TicketsRequest(ticket_id=ticketId))
+
+    visualization_delete_request = VisualizationDeleteRequest(leg_id=leg_id)
+    delete_response = database_visualization_client.DeleteTicket(visualization_delete_request)
 
     return "deletes a ticket"
