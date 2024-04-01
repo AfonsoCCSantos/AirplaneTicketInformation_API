@@ -101,6 +101,25 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
 
         return VisualizationDeleteResponse(query_status = "done")
 
+    def DeleteTicket(self, request,contextt) :
+        leg_id = request.leg_id
+
+        delete_ticket_query = f"""
+        DELETE FROM visualization.tickets t WHERE t.legId = '{leg_id}'
+        """
+
+        query_job = client.query(delete_ticket_query)
+        results = query_job.result()
+
+        delete_ticket_airlines_query = f"""
+        DELETE FROM visualization.ticket_airlines ta WHERE ta.legId = '{leg_id}'
+        """ 
+
+        query_job = client.query(delete_ticket_airlines_query)
+        results = query_job.result()
+
+        return VisualizationDeleteResponse(query_status = "done")
+
 
 
 def serve():
