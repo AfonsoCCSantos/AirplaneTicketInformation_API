@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Connect to the database ranking service
 database_ranking_host = os.getenv("DATABASE_RANKING_HOST", "localhost")
-database_ranking_channel = grpc.insecure_channel("localhost:50052")
+database_ranking_channel = grpc.insecure_channel(f"{database_ranking_host}:50052")
 database_ranking_client = RankingStub(database_ranking_channel)
 
 @app.route("/api/ranking/airlines_by_ticket_price", methods=['GET'])

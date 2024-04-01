@@ -1,4 +1,38 @@
 #!/bin/bash
+chmod u+r+x database-visualization/run.sh
+chmod u+r+x database-ranking/run.sh
+chmod u+r+x forecast/run.sh
+chmod u+r+x management/run.sh
+chmod u+r+x ranking/run.sh
+chmod u+r+x recommendations/run.sh
+chmod u+r+x visualization/run.sh
 
-docker build -t database-visualization_container -f Dockerfile .
-docker run --name database-visualization_container --rm -d -p 50051:50051 database-visualization_container
+# docker network create microservices
+
+cd database-visualization
+./run.sh
+cd ..
+
+cd database-ranking
+./run.sh
+cd ..
+
+cd forecast
+./run.sh
+cd ..
+
+cd management
+./run.sh
+cd ..
+
+cd ranking
+./run.sh
+cd ..
+
+cd recommendations
+./run.sh
+cd ..
+
+cd visualization
+./run.sh
+cd ..

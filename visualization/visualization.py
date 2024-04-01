@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 # Connect to the database visualization service
 database_visualization_host = os.getenv("DATABASE_VISUALIZATION_HOST", "localhost")
-database_visualization_channel = grpc.insecure_channel("localhost:50051")
+database_visualization_channel = grpc.insecure_channel(f"{database_visualization_host}:50051")
 database_visualization_client = VisualizationStub(database_visualization_channel)
 
 @app.route("/api/visualization/tickets/<departure>/<arrival>", methods=["GET"])
@@ -32,3 +32,4 @@ def get_airline_details(airline_code):
     airline_response = database_visualization_client.GetAirline(airline_request)
 
     return f"airlineCode: {airline_response.airline.airline_code} | airlineName: {airline_response.airline.airline_name}"
+
