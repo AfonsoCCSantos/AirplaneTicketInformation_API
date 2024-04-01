@@ -26,8 +26,8 @@ class VisualizationStub(object):
                 )
         self.AddTicket = channel.unary_unary(
                 '/Visualization/AddTicket',
-                request_serializer=visualization__pb2.Ticket.SerializeToString,
-                response_deserializer=visualization__pb2.Ticket.FromString,
+                request_serializer=visualization__pb2.VisualizationInsertionRequest.SerializeToString,
+                response_deserializer=visualization__pb2.VisualizationInsertionResponse.FromString,
                 )
 
 
@@ -67,8 +67,8 @@ def add_VisualizationServicer_to_server(servicer, server):
             ),
             'AddTicket': grpc.unary_unary_rpc_method_handler(
                     servicer.AddTicket,
-                    request_deserializer=visualization__pb2.Ticket.FromString,
-                    response_serializer=visualization__pb2.Ticket.SerializeToString,
+                    request_deserializer=visualization__pb2.VisualizationInsertionRequest.FromString,
+                    response_serializer=visualization__pb2.VisualizationInsertionResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -126,7 +126,7 @@ class Visualization(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Visualization/AddTicket',
-            visualization__pb2.Ticket.SerializeToString,
-            visualization__pb2.Ticket.FromString,
+            visualization__pb2.VisualizationInsertionRequest.SerializeToString,
+            visualization__pb2.VisualizationInsertionResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

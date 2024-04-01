@@ -10,6 +10,7 @@ from visualization_pb2 import (
     Airline,
     TicketsResponse,
     AirlineResponse,
+    VisualizationDeleteResponse
 )
 import visualization_pb2_grpc as visualization_pb2_grpc
 
@@ -68,21 +69,38 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
     
     def AddTicket(self, request, context):
         ticket = request.ticket
+        airlines = request.airlines
 
-        query = f"""
+        ticket_query = f"""
             INSERT INTO 
-            visualization.tickets (legId, startingAirport, destinationAirport, flightDate, totalFare, 
-                                    travelDuration, totalTravelDistance, isRefundable, isNonStop)
+            visualization.tickets (legId, totalFare, flightDate, travelDuration, totalTravelDistance,
+                                    isRefundable, startingAirport, destinationAirport, isNonStop)
             VALUES 
-                ('{ticket.leg_id}', '{ticket.departure_place}', '{ticket.arrival_place}', '
-                    {ticket.flight_date}', {ticket.total_fare}, {ticket.travel_duration}, 
-                    {ticket.total_travel_distance}, {ticket.is_refundable}, {ticket.is_non_stop})
+                ('{ticket.leg_id}', {ticket.total_fare},'{ticket.flight_date}', '{ticket.travel_duration}', {ticket.total_travel_distance},
+                    {ticket.is_refundable}, '{ticket.departure_place}', '{ticket.arrival_place}', {ticket.is_non_stop})
         """
 
-        query_job = client.query(query)
+        query_job = client.query(ticket_query)
         results = query_job.result()
 
-        print(results)
+        airline_rows_to_insert = []
+        ticket_airlines_rows_to_insert = []
+
+        for airline in airlines:
+            airline_rows_to_insert.append({"airlineCode": airline.airline_code, "airlineName": airline.airline_name})
+            ticket_airlines_rows_to_insert.append({"legId": ticket.leg_id, "airlineCode": airline.airline_code})
+
+
+        errors = client.insert_rows_json("visualization.airlines", airline_rows_to_insert)
+        errors = client.insert_rows_json("visualization.ticket_airlines", ticket_airlines_rows_to_insert)
+        if errors == []:
+            print("New rows have been added.")
+        else:
+            print("Encountered errors while inserting rows: {}".format(errors))
+
+
+        return VisualizationDeleteResponse(query_status = "done")
+
 
 
 def serve():

@@ -17,6 +17,23 @@ message Airline {
     string airline_name = 2;
 }
 
+message VisualizationInsertionRequest {
+    Ticket ticket = 1;
+    repeated Airline airlines = 2;
+}
+
+message VisualizationInsertionResponse {
+    string query_status = 1;
+}
+
+message VisualizationDeleteRequest {
+    Ticket ticket = 1;
+}
+
+message VisualizationDeleteResponse {
+    string query_status = 1;
+}
+
 message TicketsRequest {
     string departure_place = 1;
     string arrival_place = 2;
@@ -37,5 +54,6 @@ message AirlineResponse {
 service Visualization {
     rpc GetTickets (TicketsRequest) returns (TicketsResponse);
     rpc GetAirline (AirlineRequest) returns (AirlineResponse);
-    rpc AddTicket (Ticket) returns (Ticket);
+    rpc AddTicket (VisualizationInsertionRequest) returns (VisualizationInsertionResponse);
+    rpc DeleteTicket (VisualizationDeleteRequest) returns (VisualizationDeleteResponse);
 }

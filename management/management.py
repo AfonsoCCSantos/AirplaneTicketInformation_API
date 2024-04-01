@@ -2,7 +2,7 @@ from flask import Flask, request
 import grpc
 import os
 
-from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest
+from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest
 from visualization_pb2_grpc import VisualizationStub
 from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, AirlinePrice
 from ranking_pb2_grpc import RankingStub
@@ -23,25 +23,42 @@ database_ranking_client = RankingStub(database_ranking_channel)
 def add_tickets():
     request_body = request.json
 
+    print(request_body)
+
+    ticket_body = request_body["ticket"]
+    airlines_body = request_body["airlines"]
+
     ticket = Ticket(
-        leg_id=request_body['leg_id'],
-        departure_place=request_body['departure_place'],
-        arrival_place=request_body['arrival_place'],
-        flight_date=request_body['flight_date'],
-        total_fare=request_body['total_fare'],
-        travel_duration=request_body['travel_duration'],
-        total_travel_distance=request_body['total_travel_distance'],
-        is_refundable=request_body['is_refundable'],
-        is_non_stop=request_body['is_non_stop']
+        leg_id=ticket_body['leg_id'],
+        departure_place=ticket_body['departure_place'],
+        arrival_place=ticket_body['arrival_place'],
+        flight_date=ticket_body['flight_date'],
+        total_fare=float(ticket_body['total_fare']),
+        travel_duration=ticket_body['travel_duration'],
+        total_travel_distance=float(ticket_body['total_travel_distance']),
+        is_refundable= ticket_body['is_refundable'],
+        is_non_stop=ticket_body['is_non_stop']
     )
 
-    #airline_price = AirlinePrice(
-    #    airline_code=request_body['airline'],
-    #    price=request_body['price']
-    #)
+    airlines = []
+
+    for airline_body in airlines_body:
+        airline = Airline(
+            airline_code=airline_body["airline_code"],
+            airline_name = airline_body["airline_name"]
+        )
+
+        airlines.append(airline)
+
+    
+    visualization_insertion_request = VisualizationInsertionRequest(ticket=ticket, airlines=airlines)
 
     # Add the ticket to the tickets database
-    tickets_response = database_visualization_client.AddTicket(ticket)
+    tickets_response = database_visualization_client.AddTicket(visualization_insertion_request)
+
+    print()
+    print(tickets_response)
+    print()
 
     # Add the ticket to the ranking database
     #ranking_response = database_ranking_client.AddAirlinePrice(airline_price)
@@ -50,4 +67,7 @@ def add_tickets():
 
 @app.route("/api/management/tickets/<ticketId>", methods=['DELETE'])
 def delete_ticket(ticketId):
+    # Delete the ticket from the tickets database
+    # tickets_response = database_visualization_client.DeleteTicket(TicketsRequest(ticket_id=ticketId))
+
     return "deletes a ticket"
