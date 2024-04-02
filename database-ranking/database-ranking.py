@@ -8,6 +8,8 @@ from grpc_interceptor.exceptions import NotFound
 from ranking_pb2 import (
     AirlineAveragePrice,
     AirlinesRankingByTicketPriceResponse,
+    RankingInsertionResponse,
+    RankingDeleteResponse
 )
 import ranking_pb2_grpc as ranking_pb2_grpc
 
@@ -28,8 +30,6 @@ class DatabaseRankingService(ranking_pb2_grpc.RankingServicer):
         query_job = client.query(query)
         results = query_job.result()
 
-        
-
         for row in results:
             airline = AirlineAveragePrice(
                 airline_code=row.airlineCode,
@@ -39,6 +39,38 @@ class DatabaseRankingService(ranking_pb2_grpc.RankingServicer):
             airlines.append(airline)
         
         return AirlinesRankingByTicketPriceResponse(airlines=airlines)
+
+    def AddAirlinePrice(self, request, context):
+        airlines_price_row_to_insert = []
+
+        query = f"""
+            INSERT INTO 
+            ranking.ranking (leg_id, totalFare, airlineCode)
+            VALUES 
+                ('{request.leg_id}',{request.price},'{request.airline_code}')
+        """
+        query_job = client.query(query)
+        results = query_job.result()
+
+        errors = client.insert_rows_json("ranking.ranking", airlines_price_row_to_insert)
+        if errors == []:
+            print("New row was added.")
+        else:
+            print("Encountered errors while inserting row: {}".format(errors))   
+        
+        return RankingInsertionResponse(query_status = "done")
+
+    def DeleteTicket(self, request, context) : # Need to add leg_id collumn to the table
+        leg_id = request.leg_id
+
+        delete_ticket_query = f"""
+        DELETE FROM ranking.ranking t WHERE t.leg_id = '{leg_id}'
+        """
+
+        query_job = client.query(delete_ticket_query)
+        results = query_job.result()
+
+        return RankingDeleteResponse(query_status = "done")
 
 
 

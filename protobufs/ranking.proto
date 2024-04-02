@@ -5,11 +5,6 @@ message AirlineAveragePrice {
     float average_price = 2;
 }
 
-message AirlinePrice {
-    string airline_code = 1;
-    float price = 2;
-}
-
 message AirlinesRankingByTicketPriceRequest {
     
 }
@@ -17,8 +12,27 @@ message AirlinesRankingByTicketPriceRequest {
 message AirlinesRankingByTicketPriceResponse {
     repeated AirlineAveragePrice airlines = 1;
 }
+
+message RankingInsertionRequest {
+    string leg_id = 1;
+    string airline_code = 2;
+    float price = 3;
+}
+
+message RankingInsertionResponse {
+    string query_status = 1;
+}
+
+message RankingDeleteRequest {
+    string leg_id = 1;
+}
+
+message RankingDeleteResponse {
+    string query_status = 1;
+}
  
 service Ranking {
     rpc GetAirlinesRankingByTicketPrice (AirlinesRankingByTicketPriceRequest) returns (AirlinesRankingByTicketPriceResponse);
-    rpc AddAirlinePrice (AirlinePrice) returns (AirlinePrice);
+    rpc AddAirlinePrice (RankingInsertionRequest) returns (RankingInsertionResponse);
+    rpc DeleteTicket (RankingDeleteRequest) returns (RankingDeleteResponse);
 }

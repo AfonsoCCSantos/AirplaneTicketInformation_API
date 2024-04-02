@@ -2,7 +2,7 @@ from flask import Flask, request
 import grpc
 import os
 
-from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, VisualizationDeleteRequest
+from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, VisualizationDeleteRequest, RankingInsertionRequest, RankingDeleteRequest
 from visualization_pb2_grpc import VisualizationStub
 from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, AirlinePrice
 from ranking_pb2_grpc import RankingStub
@@ -39,7 +39,6 @@ def add_tickets():
     )
 
     airlines = []
-
     for airline_body in airlines_body:
         airline = Airline(
             airline_code=airline_body["airline_code"],
@@ -48,20 +47,40 @@ def add_tickets():
 
         airlines.append(airline)
 
-    
+        ranking_insertion_airline_price = RankingInsertionRequest(ticket.leg_id, airline.airline_code, ticket.total_fare) 
+
+        # Add the airline price to the ranking database
+        airline_price_response = database_ranking_client.AddAirlinePrice(ranking_insertion_airline_price)
+
+        if airline_price_response == "error":
+            return "Error adding airline price to the ranking database"
+
     visualization_insertion_request = VisualizationInsertionRequest(ticket=ticket, airlines=airlines)
 
     # Add the ticket to the tickets database
     tickets_response = database_visualization_client.AddTicket(visualization_insertion_request)
 
-    return "adds a new ticket"
+    if tickets_response == "error":
+        return "Error adding ticket to the visualization database"
+
+    return "Ticket added successfully"
 
 @app.route("/api/management/tickets/<leg_id>", methods=['DELETE'])
 def delete_ticket(leg_id):
     # Delete the ticket from the tickets database
     # tickets_response = database_visualization_client.DeleteTicket(TicketsRequest(ticket_id=ticketId))
 
-    visualization_delete_request = VisualizationDeleteRequest(leg_id=leg_id)
-    delete_response = database_visualization_client.DeleteTicket(visualization_delete_request)
+    #Remove ticket from ranking database
+    ranking_delete_request = RankingDeleteRequest(leg_id=leg_id)
+    ranking_delete_response = database_ranking_client.DeleteTicket(ranking_delete_request)
 
-    return "deletes a ticket"
+    if ranking_delete_response == "error":
+        return "Error deleting ticket from the ranking database"
+
+    visualization_delete_request = VisualizationDeleteRequest(leg_id=leg_id)
+    visualization_delete_response = database_visualization_client.DeleteTicket(visualization_delete_request)
+
+    if visualization_delete_response == "error":
+        return "Error deleting ticket from the visualization database"
+
+    return "Ticket deleted successfully"

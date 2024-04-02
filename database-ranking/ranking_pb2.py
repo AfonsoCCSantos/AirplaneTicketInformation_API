@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rranking.proto\"B\n\x13\x41irlineAveragePrice\x12\x14\n\x0c\x61irline_code\x18\x01 \x01(\t\x12\x15\n\raverage_price\x18\x02 \x01(\x02\"3\n\x0c\x41irlinePrice\x12\x14\n\x0c\x61irline_code\x18\x01 \x01(\t\x12\r\n\x05price\x18\x02 \x01(\x02\"%\n#AirlinesRankingByTicketPriceRequest\"N\n$AirlinesRankingByTicketPriceResponse\x12&\n\x08\x61irlines\x18\x01 \x03(\x0b\x32\x14.AirlineAveragePrice2\xaa\x01\n\x07Ranking\x12n\n\x1fGetAirlinesRankingByTicketPrice\x12$.AirlinesRankingByTicketPriceRequest\x1a%.AirlinesRankingByTicketPriceResponse\x12/\n\x0f\x41\x64\x64\x41irlinePrice\x12\r.AirlinePrice\x1a\r.AirlinePriceb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\rranking.proto\"B\n\x13\x41irlineAveragePrice\x12\x14\n\x0c\x61irline_code\x18\x01 \x01(\t\x12\x15\n\raverage_price\x18\x02 \x01(\x02\"%\n#AirlinesRankingByTicketPriceRequest\"N\n$AirlinesRankingByTicketPriceResponse\x12&\n\x08\x61irlines\x18\x01 \x03(\x0b\x32\x14.AirlineAveragePrice\"N\n\x17RankingInsertionRequest\x12\x0e\n\x06leg_id\x18\x01 \x01(\t\x12\x14\n\x0c\x61irline_code\x18\x02 \x01(\t\x12\r\n\x05price\x18\x03 \x01(\x02\"0\n\x18RankingInsertionResponse\x12\x14\n\x0cquery_status\x18\x01 \x01(\t\"&\n\x14RankingDeleteRequest\x12\x0e\n\x06leg_id\x18\x01 \x01(\t\"-\n\x15RankingDeleteResponse\x12\x14\n\x0cquery_status\x18\x01 \x01(\t2\x80\x02\n\x07Ranking\x12n\n\x1fGetAirlinesRankingByTicketPrice\x12$.AirlinesRankingByTicketPriceRequest\x1a%.AirlinesRankingByTicketPriceResponse\x12\x46\n\x0f\x41\x64\x64\x41irlinePrice\x12\x18.RankingInsertionRequest\x1a\x19.RankingInsertionResponse\x12=\n\x0c\x44\x65leteTicket\x12\x15.RankingDeleteRequest\x1a\x16.RankingDeleteResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -23,12 +23,18 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _globals['_AIRLINEAVERAGEPRICE']._serialized_start=17
   _globals['_AIRLINEAVERAGEPRICE']._serialized_end=83
-  _globals['_AIRLINEPRICE']._serialized_start=85
-  _globals['_AIRLINEPRICE']._serialized_end=136
-  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_start=138
-  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_end=175
-  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_start=177
-  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_end=255
-  _globals['_RANKING']._serialized_start=258
-  _globals['_RANKING']._serialized_end=428
+  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_start=85
+  _globals['_AIRLINESRANKINGBYTICKETPRICEREQUEST']._serialized_end=122
+  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_start=124
+  _globals['_AIRLINESRANKINGBYTICKETPRICERESPONSE']._serialized_end=202
+  _globals['_RANKINGINSERTIONREQUEST']._serialized_start=204
+  _globals['_RANKINGINSERTIONREQUEST']._serialized_end=282
+  _globals['_RANKINGINSERTIONRESPONSE']._serialized_start=284
+  _globals['_RANKINGINSERTIONRESPONSE']._serialized_end=332
+  _globals['_RANKINGDELETEREQUEST']._serialized_start=334
+  _globals['_RANKINGDELETEREQUEST']._serialized_end=372
+  _globals['_RANKINGDELETERESPONSE']._serialized_start=374
+  _globals['_RANKINGDELETERESPONSE']._serialized_end=419
+  _globals['_RANKING']._serialized_start=422
+  _globals['_RANKING']._serialized_end=678
 # @@protoc_insertion_point(module_scope)

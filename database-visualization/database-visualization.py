@@ -10,7 +10,8 @@ from visualization_pb2 import (
     Airline,
     TicketsResponse,
     AirlineResponse,
-    VisualizationDeleteResponse
+    VisualizationDeleteResponse,
+    VisualizationInsertionResponse
 )
 import visualization_pb2_grpc as visualization_pb2_grpc
 
@@ -90,16 +91,15 @@ class DatabaseVisualizationService(visualization_pb2_grpc.VisualizationServicer)
             airline_rows_to_insert.append({"airlineCode": airline.airline_code, "airlineName": airline.airline_name})
             ticket_airlines_rows_to_insert.append({"legId": ticket.leg_id, "airlineCode": airline.airline_code})
 
-
         errors = client.insert_rows_json("visualization.airlines", airline_rows_to_insert)
         errors = client.insert_rows_json("visualization.ticket_airlines", ticket_airlines_rows_to_insert)
         if errors == []:
             print("New rows have been added.")
         else:
             print("Encountered errors while inserting rows: {}".format(errors))
+            return VisualizationInsertionResponse(query_status = "error")
 
-
-        return VisualizationDeleteResponse(query_status = "done")
+        return VisualizationInsertionResponse(query_status = "done")
 
     def DeleteTicket(self, request,contextt) :
         leg_id = request.leg_id

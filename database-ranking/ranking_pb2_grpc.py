@@ -21,8 +21,13 @@ class RankingStub(object):
                 )
         self.AddAirlinePrice = channel.unary_unary(
                 '/Ranking/AddAirlinePrice',
-                request_serializer=ranking__pb2.AirlinePrice.SerializeToString,
-                response_deserializer=ranking__pb2.AirlinePrice.FromString,
+                request_serializer=ranking__pb2.RankingInsertionRequest.SerializeToString,
+                response_deserializer=ranking__pb2.RankingInsertionResponse.FromString,
+                )
+        self.DeleteTicket = channel.unary_unary(
+                '/Ranking/DeleteTicket',
+                request_serializer=ranking__pb2.RankingDeleteRequest.SerializeToString,
+                response_deserializer=ranking__pb2.RankingDeleteResponse.FromString,
                 )
 
 
@@ -41,6 +46,12 @@ class RankingServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeleteTicket(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RankingServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -51,8 +62,13 @@ def add_RankingServicer_to_server(servicer, server):
             ),
             'AddAirlinePrice': grpc.unary_unary_rpc_method_handler(
                     servicer.AddAirlinePrice,
-                    request_deserializer=ranking__pb2.AirlinePrice.FromString,
-                    response_serializer=ranking__pb2.AirlinePrice.SerializeToString,
+                    request_deserializer=ranking__pb2.RankingInsertionRequest.FromString,
+                    response_serializer=ranking__pb2.RankingInsertionResponse.SerializeToString,
+            ),
+            'DeleteTicket': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeleteTicket,
+                    request_deserializer=ranking__pb2.RankingDeleteRequest.FromString,
+                    response_serializer=ranking__pb2.RankingDeleteResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -93,7 +109,24 @@ class Ranking(object):
             timeout=None,
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/Ranking/AddAirlinePrice',
-            ranking__pb2.AirlinePrice.SerializeToString,
-            ranking__pb2.AirlinePrice.FromString,
+            ranking__pb2.RankingInsertionRequest.SerializeToString,
+            ranking__pb2.RankingInsertionResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeleteTicket(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/Ranking/DeleteTicket',
+            ranking__pb2.RankingDeleteRequest.SerializeToString,
+            ranking__pb2.RankingDeleteResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

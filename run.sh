@@ -7,7 +7,7 @@ chmod u+r+x ranking/run.sh
 chmod u+r+x recommendations/run.sh
 chmod u+r+x visualization/run.sh
 
-# docker network create microservices
+#docker network create microservices
 
 cd database-visualization
 ./run.sh
