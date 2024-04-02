@@ -41,20 +41,15 @@ class DatabaseRankingService(ranking_pb2_grpc.RankingServicer):
         return AirlinesRankingByTicketPriceResponse(airlines=airlines)
 
     def AddAirlinePrice(self, request, context):
+        airlines = request.airlines
         airlines_price_row_to_insert = []
 
-        query = f"""
-            INSERT INTO 
-            ranking.ranking (leg_id, totalFare, airlineCode)
-            VALUES 
-                ('{request.leg_id}',{request.price},'{request.airline_code}')
-        """
-        query_job = client.query(query)
-        results = query_job.result()
+        for airline in airlines:
+            airlines_price_row_to_insert.append({"airlineCode": airline.airline_code, "leg_id": request.leg_id, "totalFare": request.price})
 
         errors = client.insert_rows_json("ranking.ranking", airlines_price_row_to_insert)
         if errors == []:
-            print("New row was added.")
+            print("New rows have been added.")
         else:
             print("Encountered errors while inserting row: {}".format(errors))   
         

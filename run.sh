@@ -1,13 +1,19 @@
 #!/bin/bash
-chmod u+r+x database-visualization/run.sh
-chmod u+r+x database-ranking/run.sh
-chmod u+r+x forecast/run.sh
-chmod u+r+x management/run.sh
-chmod u+r+x ranking/run.sh
-chmod u+r+x recommendations/run.sh
-chmod u+r+x visualization/run.sh
 
-#docker network create microservices
+# Ensure run scripts have execute permissions
+chmod +x database-visualization/run.sh
+chmod +x database-ranking/run.sh
+chmod +x forecast/run.sh
+chmod +x management/run.sh
+chmod +x ranking/run.sh
+chmod +x recommendations/run.sh
+chmod +x visualization/run.sh
+
+# Create Docker network if not exists
+docker network inspect microservices &>/dev/null || {
+    echo "Creating Docker network..."
+    docker network create microservices
+}
 
 cd database-visualization
 ./run.sh

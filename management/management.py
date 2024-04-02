@@ -2,21 +2,23 @@ from flask import Flask, request
 import grpc
 import os
 
-from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, VisualizationDeleteRequest, RankingInsertionRequest, RankingDeleteRequest
+from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, \
+                                 VisualizationDeleteRequest
 from visualization_pb2_grpc import VisualizationStub
-from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, AirlinePrice
+from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, \
+                         RankingInsertionRequest, RankingDeleteRequest, AirlineRanking
 from ranking_pb2_grpc import RankingStub
 
 app = Flask(__name__)
 
 # Connect to the database visualization service
 database_visualization_host = os.getenv("DATABASE_VISUALIZATION_HOST", "localhost")
-database_visualization_channel = grpc.insecure_channel("localhost:50051")
+database_visualization_channel = grpc.insecure_channel(f"{database_visualization_host}:50051")
 database_visualization_client = VisualizationStub(database_visualization_channel)
 
 # Connect to the database ranking service
-database_ranking_host = os.getenv("DATABASE_MANAGEMENT_HOST", "localhost")
-database_ranking_channel = grpc.insecure_channel("localhost:50052")
+database_ranking_host = os.getenv("DATABASE_RANKING_HOST", "localhost")
+database_ranking_channel = grpc.insecure_channel(f"{database_ranking_host}:50052")
 database_ranking_client = RankingStub(database_ranking_channel)
 
 @app.route("/api/management/tickets", methods=['POST'])
@@ -31,37 +33,40 @@ def add_tickets():
         departure_place=ticket_body['departure_place'],
         arrival_place=ticket_body['arrival_place'],
         flight_date=ticket_body['flight_date'],
-        total_fare=float(ticket_body['total_fare']),
+        total_fare=ticket_body['total_fare'],
         travel_duration=ticket_body['travel_duration'],
-        total_travel_distance=float(ticket_body['total_travel_distance']),
+        total_travel_distance=ticket_body['total_travel_distance'],
         is_refundable= ticket_body['is_refundable'],
         is_non_stop=ticket_body['is_non_stop']
     )
 
     airlines = []
+    airlinesRanking = []
     for airline_body in airlines_body:
         airline = Airline(
             airline_code=airline_body["airline_code"],
             airline_name = airline_body["airline_name"]
         )
+        airlineRanking = AirlineRanking(
+            airline_code=airline_body["airline_code"],
+            airline_name = airline_body["airline_name"]
+        )
 
         airlines.append(airline)
-
-        ranking_insertion_airline_price = RankingInsertionRequest(ticket.leg_id, airline.airline_code, ticket.total_fare) 
-
-        # Add the airline price to the ranking database
-        airline_price_response = database_ranking_client.AddAirlinePrice(ranking_insertion_airline_price)
-
-        if airline_price_response == "error":
-            return "Error adding airline price to the ranking database"
+        airlinesRanking.append(airlineRanking)
 
     visualization_insertion_request = VisualizationInsertionRequest(ticket=ticket, airlines=airlines)
+    ranking_insertion_request = RankingInsertionRequest(leg_id = ticket.leg_id, price=ticket.total_fare, airlines=airlinesRanking)
 
     # Add the ticket to the tickets database
     tickets_response = database_visualization_client.AddTicket(visualization_insertion_request)
+    # Add to the ranking database
+    ranking_response = database_ranking_client.AddAirlinePrice(ranking_insertion_request)
 
     if tickets_response == "error":
         return "Error adding ticket to the visualization database"
+    if ranking_response == "error":
+        return "Error adding airline price to the ranking database"    
 
     return "Ticket added successfully"
 
