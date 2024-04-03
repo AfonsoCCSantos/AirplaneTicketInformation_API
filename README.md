@@ -52,7 +52,8 @@ For the building and deployment of the microservices there is a run.sh file at t
 <br>
 So, to build the project, the user should use the following command in the base folder of the project: <br>
 `./run.sh`<br>
-which will start all the containers. To test a specific endpoint, a browser or a tool like Postman should be used.
+which will start all the containers. <br>
+To test a specific endpoint, a browser or a tool like Postman should be used. If the docker containers are started in the Google Cloud Platform, then the Google Cloud Platform web preview should be used.
 
 ## Limitations
 When adding a ticket, multiple entries representing airlines and the relation of tickets and arilines are created. This is done via BigQuery streaming buffers. The problem with this imlpementation is that the data is  persisted in the tables 90 minutes after the insertion operation, making it only possible to read them and impossible to perform other operations (like deleting) until the data is persisted. <br>
