@@ -55,8 +55,9 @@ So, to build the project, the user should use the following command in the base 
 which will start all the containers. To test a specific endpoint, a browser or a tool like Postman should be used.
 
 ## Limitations
-When adding a ticket, multiple entries representing airlines and the relation of tickets and arilines are created. This is done via BigQuery streaming buffers. The problem with this imlpementation is that the data is  persisted in the tables 90 minutes after the insertion operation, making it only possible to read them and impossible to perform other operations (like deleting) until the data is persisted. 
-
+When adding a ticket, multiple entries representing airlines and the relation of tickets and arilines are created. This is done via BigQuery streaming buffers. The problem with this imlpementation is that the data is  persisted in the tables 90 minutes after the insertion operation, making it only possible to read them and impossible to perform other operations (like deleting) until the data is persisted. <br>
+<br>
+For this phase, the services that require machine learning algorithms have still not been implemented. We plan to implement these services on a later phase using Spark.
 
 
 
