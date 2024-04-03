@@ -27,7 +27,7 @@ The database-visualization microservice can only be accessed by the visualizatio
 
 ### Ranking
 
-The ranking microservice is a REST API which the only responsabilities are to answer client side requests and delegate their work to the database-ranking microservice via gRPC.
+The ranking microservice is a REST API which the only responsabilities are to answer client side requests and delegate their work to the database-ranking microservice via gRPC..
 
 ### Database-Ranking
 
