@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker build -t recommendations_container -f Dockerfile .
-docker run --name recommendations_container --rm -d -p 8083:8083 recommendations_container
+docker build -t recommendations-container -f Dockerfile .
+docker run --name recommendations-container --rm -d -p 8083:8083 recommendations-container

@@ -1,0 +1,252 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: database-visualization
+    labels:
+        app: database-visualization
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: database-visualization
+    template:
+        metadata:
+            labels:
+                app: database-visualization
+        spec:
+            containers:
+                - name: database-visualization-container
+                  image: alexandrefigueired0/database-visualization-container:latest
+                  ports:
+                  - containerPort: 50051
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: database-ranking
+    labels:
+        app: database-ranking
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: database-ranking
+    template:
+        metadata:
+            labels:
+                app: database-ranking
+        spec:
+            containers:
+                - name: database-ranking-container
+                  image: alexandrefigueired0/database-ranking-container:latest
+                  ports:
+                  - containerPort: 50052
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: forecast
+    labels:
+        app: forecast
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: forecast
+    template:
+        metadata:
+            labels:
+                app: forecast
+        spec:
+            containers:
+                - name: forecast-container
+                  image: alexandrefigueired0/forecast-container:latest  
+                  ports:
+                  - containerPort: 8080         
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: management
+    labels:
+        app: management
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: management
+    template:
+        metadata:
+            labels:
+                app: management
+        spec:
+            containers:
+                - name: management-container
+                  image: alexandrefigueired0/management-container:latest
+                  env:
+                      - name: DATABASE_VISUALIZATION_HOST
+                        value: database-visualization-container
+                      - name: DATABASE_RANKING_HOST
+                        value: database-ranking-container
+                  ports:
+                  - containerPort: 8081
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: ranking
+    labels:
+        app: ranking
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: ranking
+    template:
+        metadata:
+            labels:
+                app: ranking
+        spec:
+            containers:
+                - name: ranking-container
+                  image: alexandrefigueired0/ranking-container:latest
+                  env:
+                      - name: DATABASE_RANKING_HOST
+                        value: database-ranking-container
+                  ports:
+                    - containerPort: 8082
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: recommendations
+    labels:
+        app: recommendations
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: recommendations
+    template:
+        metadata:
+            labels:
+                app: recommendations
+        spec:
+            containers:
+                - name: recommendations-container
+                  image: alexandrefigueired0/recommendations-container:latest
+                  ports:
+                  - containerPort: 8083 
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: visualization
+    labels:
+        app: visualization
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: visualization
+    template:
+        metadata:
+            labels:
+                app: visualization
+        spec:
+            containers:
+                - name: visualization-container
+                  image: alexandrefigueired0/visualization-container:latest
+                  env:
+                      - name: DATABASE_VISUALIZATION_HOST
+                        value: database-visualization-container
+                  ports:
+                  - containerPort: 8084 
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: database-ranking
+spec:
+    selector:
+        app: database-ranking
+    ports:
+        - protocol: TCP
+          port: 50052
+          targetPort: 50052
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: database-visualization
+spec:
+    selector:
+        app: database-visualization
+    ports:
+        - protocol: TCP
+          port: 50051
+          targetPort: 50051
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: forecast
+spec:
+
+    selector:
+        app: forecast
+    ports:
+        - protocol: TCP
+          port: 8080
+          targetPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: management
+spec:
+    selector:
+        app: management
+    ports:
+        - protocol: TCP
+          port: 8081
+          targetPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: ranking
+spec:
+    selector:
+        app: ranking
+    ports:
+        - protocol: TCP
+          port: 8082
+          targetPort: 8082
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: recommendations
+spec:
+    selector:
+        app: recommendations
+    ports:
+        - protocol: TCP
+          port: 8083
+          targetPort: 8083
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: visualization
+spec:
+    selector:
+        app: visualization
+    ports:
+        - protocol: TCP
+          port: 8084
+          targetPort: 8084
+        
