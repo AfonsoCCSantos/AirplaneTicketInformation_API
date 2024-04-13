@@ -22,15 +22,17 @@ The visualization microservice is a REST API which the only responsabilities are
 
 ### Database-Visualization
 
-The database-visualization microservice can only be accessed by the visualization and management microservices via gRPC. Its only responsibilities are to handle requests from both of these microservices by retrieving, adding and deleting information from the database.
+The database-visualization microservice can only be accessed by the visualization and management microservices via gRPC. Its only responsibilities are to handle requests from both of these microservices by retrieving, adding and deleting information from the database. The database consists of the tables: tickets, airlines and ticket_airlines. The table tickets stores information like: legId, totalFare, flightDate, travelDuration, totalTravelDistance, isRefundable, startingAirport, destinationAirport, isNonStop. The table airlines stores information like: airlineName, airlineCode. The table ticket_airlines is responsible to map tickets and airlines, storing the legId of the ticket and the airlineCode of the airline.
+
 
 ### Ranking
 
-The ranking microservice is a REST API which the only responsabilities are to answer client side requests and delegate their work to the database-ranking microservice via gRPC.
+The ranking microservice is a REST API which the only responsabilities are to answer client side requests and delegate their work to the database-ranking microservice via gRPC..
 
 ### Database-Ranking
 
-The database-ranking microservice can only be accessed by the ranking and management microservices via gRPC. Its only responsibilities are to handle requests from both of these microservices by retrieving, adding and deleting information from the database.
+The database-ranking microservice can only be accessed by the ranking and management microservices via gRPC. Its only responsibilities are to handle requests from both of these microservices by retrieving, adding and deleting information from the database. The database related to the ranking service
+consists of a single table called "ranking". This table consists of tickets and holds its id, its price and the corresponding airline so that it is possible to get a hold of the average price for every airline, thus creating a ranking.
 
 ### Recommendations
 
@@ -50,8 +52,13 @@ For the building and deployment of the microservices there is a run.sh file at t
 <br>
 So, to build the project, the user should use the following command in the base folder of the project: <br>
 `./run.sh`<br>
-which will start all the containers. To test a specific endpoint, a browser or a tool like Postman should be used.
+which will start all the containers. <br>
+To test a specific endpoint, a browser or a tool like Postman should be used. If the docker containers are started in the Google Cloud Platform, then the Google Cloud Platform web preview should be used.
 
+## Limitations
+When adding a ticket, multiple entries representing airlines and the relation of tickets and arilines are created. This is done via BigQuery streaming buffers. The problem with this imlpementation is that the data is  persisted in the tables 90 minutes after the insertion operation, making it only possible to read them and impossible to perform other operations (like deleting) until the data is persisted. <br>
+<br>
+For this phase, the services that require machine learning algorithms have still not been implemented. We plan to implement these services on a later phase using Spark.
 
 
 
