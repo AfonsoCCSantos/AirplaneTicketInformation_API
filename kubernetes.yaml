@@ -86,9 +86,9 @@ spec:
                   image: alexandrefigueired0/management-container:latest
                   env:
                       - name: DATABASE_VISUALIZATION_HOST
-                        value: database-visualization-container
+                        value: database-visualization
                       - name: DATABASE_RANKING_HOST
-                        value: database-ranking-container
+                        value: database-ranking
                   ports:
                   - containerPort: 8081
 ---
@@ -113,7 +113,7 @@ spec:
                   image: alexandrefigueired0/ranking-container:latest
                   env:
                       - name: DATABASE_RANKING_HOST
-                        value: database-ranking-container
+                        value: database-ranking
                   ports:
                     - containerPort: 8082
 
@@ -161,7 +161,7 @@ spec:
                   image: alexandrefigueired0/visualization-container:latest
                   env:
                       - name: DATABASE_VISUALIZATION_HOST
-                        value: database-visualization-container
+                        value: database-visualization
                   ports:
                   - containerPort: 8084 
 ---

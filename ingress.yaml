@@ -1,0 +1,49 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: nginx-s-c
+      port:
+        number: 80
+  rules:
+    - http:
+        paths:
+        - path: /api/forecast
+          pathType: Prefix
+          backend:
+            service:
+              name: forecast
+              port:
+                number: 8080
+        - path: /api/management
+          pathType: Prefix
+          backend:
+            service:
+              name: management
+              port:
+                number: 8081
+        - path: /api/ranking
+          pathType: Prefix
+          backend:
+            service:
+              name: ranking
+              port:
+                number: 8082
+        - path: /api/recommendations
+          pathType: Prefix
+          backend:
+            service:
+              name: recommendations
+              port:
+                number: 8083
+        - path: /api/visualization
+          pathType: Prefix
+          backend:
+            service:
+              name: visualization
+              port:
+                number: 8084
