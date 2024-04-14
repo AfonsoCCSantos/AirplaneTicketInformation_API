@@ -89,6 +89,10 @@ spec:
                         value: database-visualization
                       - name: DATABASE_RANKING_HOST
                         value: database-ranking
+                      - name: DOMAIN
+                        value: tomasbarreto.eu.auth0.com
+                      - name: API_IDENTIFIER
+                        value: https://localhost:8080/
                   ports:
                   - containerPort: 8081
 ---
@@ -139,6 +143,11 @@ spec:
                   image: alexandrefigueired0/recommendations-container:latest
                   ports:
                   - containerPort: 8083 
+                  env:
+                      - name: DOMAIN
+                        value: tomasbarreto.eu.auth0.com
+                      - name: API_IDENTIFIER
+                        value: https://localhost:8080/
 ---
 apiVersion: apps/v1
 kind: Deployment

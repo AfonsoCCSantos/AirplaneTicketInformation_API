@@ -11,10 +11,12 @@ from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTi
                          RankingInsertionRequest, RankingDeleteRequest, AirlineRanking
 from ranking_pb2_grpc import RankingStub
 
+domain = os.getenv("DOMAIN", "")
+api_identifier = os.getenv("API_IDENTIFIER", "")
 require_auth = ResourceProtector()
 validator = Auth0JWTBearerTokenValidator(
-    "tomasbarreto.eu.auth0.com",
-    "https://localhost:8084"
+    domain,
+    api_identifier
 )
 require_auth.register_token_validator(validator)
 
