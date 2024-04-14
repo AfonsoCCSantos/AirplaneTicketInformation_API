@@ -1,6 +1,8 @@
 from flask import Flask, request
 import grpc
 import os
+from authlib.integrations.flask_oauth2 import ResourceProtector
+from validator import Auth0JWTBearerTokenValidator
 
 from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, \
                                  VisualizationDeleteRequest
@@ -8,6 +10,13 @@ from visualization_pb2_grpc import VisualizationStub
 from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, \
                          RankingInsertionRequest, RankingDeleteRequest, AirlineRanking
 from ranking_pb2_grpc import RankingStub
+
+require_auth = ResourceProtector()
+validator = Auth0JWTBearerTokenValidator(
+    "tomasbarreto.eu.auth0.com",
+    "https://localhost:8084"
+)
+require_auth.register_token_validator(validator)
 
 app = Flask(__name__)
 
@@ -22,6 +31,7 @@ database_ranking_channel = grpc.insecure_channel(f"{database_ranking_host}:50052
 database_ranking_client = RankingStub(database_ranking_channel)
 
 @app.route("/api/management/tickets", methods=['POST'])
+@require_auth("admin")
 def add_tickets():
     request_body = request.json
 
@@ -71,6 +81,7 @@ def add_tickets():
     return "Ticket added successfully"
 
 @app.route("/api/management/tickets/<leg_id>", methods=['DELETE'])
+@require_auth("admin")
 def delete_ticket(leg_id):
     # Delete the ticket from the tickets database
     # tickets_response = database_visualization_client.DeleteTicket(TicketsRequest(ticket_id=ticketId))
