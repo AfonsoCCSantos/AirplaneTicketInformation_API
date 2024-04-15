@@ -19,3 +19,7 @@ def get_ranking_airlines_ticket_pricing():
     airline_ranking_response = database_ranking_client.GetAirlinesRankingByTicketPrice(airline_ranking_request)
     
     return f"ranking of airlines: {airline_ranking_response.airlines}"
+
+@app.route("/api/ranking/liveness-check", methods=['GET'])
+def liveness_check():
+    return "ok",200

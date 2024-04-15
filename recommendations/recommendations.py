@@ -24,3 +24,7 @@ def get_chepeast_airline(departure, arrival, start_date, end_date):
 def get_chepeast_date(departure, arrival, start_date, end_date):
     return "recommendation for the cheapest date to fly"
 
+@app.route("/api/recommendations/liveness-check", methods=['GET'])
+def liveness_check():
+    return "ok",200
+

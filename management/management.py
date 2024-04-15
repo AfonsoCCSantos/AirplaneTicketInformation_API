@@ -105,4 +105,4 @@ def delete_ticket(leg_id):
 
 @app.route("/api/management/liveness-check", methods=['GET'])
 def liveness_check():
-    return 200
+    return "ok",200

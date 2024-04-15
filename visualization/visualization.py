@@ -35,4 +35,4 @@ def get_airline_details(airline_code):
 
 @app.route("/api/visualization/liveness-check", methods=['GET'])
 def liveness_check():
-    return 200
+    return "ok",200
