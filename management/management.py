@@ -102,3 +102,7 @@ def delete_ticket(leg_id):
         return "Error deleting ticket from the visualization database"
 
     return "Ticket deleted successfully"
+
+@app.route("/api/management/liveness-check", methods=['GET'])
+def liveness_check():
+    return 200

@@ -23,3 +23,4 @@ def get_chepeast_airline(departure, arrival, start_date, end_date):
 @require_auth("subscriber")
 def get_chepeast_date(departure, arrival, start_date, end_date):
     return "recommendation for the cheapest date to fly"
+

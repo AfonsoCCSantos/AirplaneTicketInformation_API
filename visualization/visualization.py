@@ -33,3 +33,6 @@ def get_airline_details(airline_code):
 
     return f"airlineCode: {airline_response.airline.airline_code} | airlineName: {airline_response.airline.airline_name}"
 
+@app.route("/api/visualization/liveness-check", methods=['GET'])
+def liveness_check():
+    return 200
