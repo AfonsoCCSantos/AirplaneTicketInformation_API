@@ -6,4 +6,5 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
  --selector=app.kube
 kubectl apply -f ingress.yaml
 kubectl apply -f kubernetes.yaml
+kubectl apply -f autoscaler.yaml
 kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80
