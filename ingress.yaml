@@ -2,8 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: nginx-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/auth-url: "https://tomasbarreto.eu.auth0.com/authorize?client_id=IEvRaY6CXjAAT4UElgICkfN12DydX71a&redirect_uri=https://localhost:8080/api/auth/callback&scope=openid%20profile%20email%20phone%20address&response_type=code&state=9c132db5ca4acd120fb2e326a499a02b23bfd806"
 spec:
   ingressClassName: nginx
   defaultBackend:
