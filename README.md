@@ -48,17 +48,39 @@ The management microservice is able the database-visualization and the database-
 
 ## 🛠️ Building & Deployment 
 
-For the building and deployment of the microservices there is a run.sh file at the base folder of the project. This run.sh script calls a run.sh present in each of the microservices folders, which builds and runs their respective Docker containers <br>
+### Running Locally
+For the building and deployment of the microservices, the following commands should be run.<br>
+`kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.6.4/deploy/static/provider/cloud/deploy.yaml`<br>
+`kubectl apply -f ingress.yaml`<br>
+`kubectl apply -f kubernetes.yaml`<br>
+`kubectl apply -f autoscaler.yaml`<br>
+`kubectl port-forward --namespace=ingress-nginx service/ingress-nginx-controller 8080:80`
 <br>
-So, to build the project, the user should use the following command in the base folder of the project: <br>
-`./run.sh`<br>
-which will start all the containers. <br>
+
 To test a specific endpoint, a browser or a tool like Postman should be used. If the docker containers are started in the Google Cloud Platform, then the Google Cloud Platform web preview should be used.
 
-## Limitations
+### Running In the Cloud
+To run the project in the Google Cloud, the following commands should be used.
+
+`minikube start`<br>
+`gcloud config set project projectId` where projectId is the id of a project in GCP <br>
+`gcloud container clusters create-auto clusterName --region=europe-west4` where clusterName is the name of the cluster to create <br>
+`gcloud container clusters get-credentials clusterName --region=europe-west4` where clusterName is the name of the previously created cluster <br>
+`kubectl config current-context` <br>
+`kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.6.4/deploy/static/provider/cloud/deploy.yaml`<br>
+Wait for the ingress-nginx-controller to start running, use the next command to verify this condition <br>
+`kubectl get pods --namesapce=ingress-nginx` <br>
+`kubectl apply -f ingress.yaml`<br>
+`kubectl apply -f kubernetes.yaml`<br>
+`kubectl apply -f autoscaler.yaml`<br>
+`kubectl get ingress` wait until an ip is attributed, to get the ip of where the application is running on <br>
+
+## 📉 Limitations
 When adding a ticket, multiple entries representing airlines and the relation of tickets and arilines are created. This is done via BigQuery streaming buffers. The problem with this imlpementation is that the data is  persisted in the tables 90 minutes after the insertion operation, making it only possible to read them and impossible to perform other operations (like deleting) until the data is persisted. <br>
 <br>
 For this phase, the services that require machine learning algorithms have still not been implemented. We plan to implement these services on a later phase using Spark.
+<br><br>
+There are some endpoints that require authentication to work (The endpoints from the recommendation and the management services). We aim to present the user with a login page when he tries to access these endpoints, being redirected (with his token obtained from the login) to the endpoint he initially tried to access. As of now, the user must get the token beforehand and pass it in the URL of the endpoints that require authentication. 
 
 
 
