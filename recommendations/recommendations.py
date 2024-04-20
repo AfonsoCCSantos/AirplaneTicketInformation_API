@@ -30,9 +30,9 @@ oauth.register(
 )
 
 
-@app.route("/see_token")
+@app.route("/see_id")
 def see_token():
-    return session["user"]
+    return session["user"]["userinfo"]["sub"]
 
 
 @app.route("/login")
@@ -45,7 +45,7 @@ def login():
 def callback():
     token = oauth.auth0.authorize_access_token()
     session["user"] = token
-    return redirect("/see_token")
+    return redirect("/see_id")
 
 
 @app.route("/logout")
