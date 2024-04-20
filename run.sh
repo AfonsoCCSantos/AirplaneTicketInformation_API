@@ -35,10 +35,14 @@ cd ranking
 ./run.sh
 cd ..
 
-cd recommendations
+# cd recommendations
+# ./run.sh
+# cd ..
+
+cd visualization
 ./run.sh
 cd ..
 
-cd visualization
+cd login
 ./run.sh
 cd ..

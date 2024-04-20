@@ -1,8 +1,6 @@
 flask ~= 2.2.3
 grpcio-tools ~= 1.30
 Jinja2 ~= 3.1.2
-pytest ~= 5.4
 Authlib
 requests
-PyJWT
 python-dotenv>=0.19.2
