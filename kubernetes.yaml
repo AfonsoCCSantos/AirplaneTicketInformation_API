@@ -116,10 +116,14 @@ spec:
                         value: database-visualization
                       - name: DATABASE_RANKING_HOST
                         value: database-ranking
-                      - name: DOMAIN
+                      - name: APP_SECRET_KEY
+                        value: 699b3d871c8e5daa1cd5a2bf6e2b9bf436a05b469bc61885a6a9c5026b71047c
+                      - name: AUTH0_DOMAIN
                         value: tomasbarreto.eu.auth0.com
-                      - name: API_IDENTIFIER
-                        value: https://localhost:8080/
+                      - name: AUTH0_CLIENT_ID
+                        value: IEvRaY6CXjAAT4UElgICkfN12DydX71a
+                      - name: AUTH0_CLIENT_SECRET
+                        value: CpYur9-495GPTSc-rxT-NPoDm1rZ7uASFrdlWwDiTkcAyFns2utviMIh7Kq1BgAA
                   ports:
                       - containerPort: 8081
                   resources:
@@ -196,10 +200,14 @@ spec:
                   ports:
                       - containerPort: 8083
                   env:
-                      - name: DOMAIN
+                      - name: APP_SECRET_KEY
+                        value: 699b3d871c8e5daa1cd5a2bf6e2b9bf436a05b469bc61885a6a9c5026b71047c
+                      - name: AUTH0_DOMAIN
                         value: tomasbarreto.eu.auth0.com
-                      - name: API_IDENTIFIER
-                        value: https://localhost:8080/
+                      - name: AUTH0_CLIENT_ID
+                        value: IEvRaY6CXjAAT4UElgICkfN12DydX71a
+                      - name: AUTH0_CLIENT_SECRET
+                        value: CpYur9-495GPTSc-rxT-NPoDm1rZ7uASFrdlWwDiTkcAyFns2utviMIh7Kq1BgAA
                   resources:
                       requests:
                           memory: "32Mi"
@@ -249,6 +257,50 @@ spec:
                     httpGet:
                         path: /api/visualization/liveness-check
                         port: 8084
+                    initialDelaySeconds: 10
+                    periodSeconds: 5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: login
+    labels:
+        app: login
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: login
+    template:
+        metadata:
+            labels:
+                app: login
+        spec:
+            containers:
+                - name: login-container
+                  image: alexandrefigueired0/login-container:latest
+                  env:
+                      - name: APP_SECRET_KEY
+                        value: 699b3d871c8e5daa1cd5a2bf6e2b9bf436a05b469bc61885a6a9c5026b71047c
+                      - name: AUTH0_DOMAIN
+                        value: tomasbarreto.eu.auth0.com
+                      - name: AUTH0_CLIENT_ID
+                        value: IEvRaY6CXjAAT4UElgICkfN12DydX71a
+                      - name: AUTH0_CLIENT_SECRET
+                        value: CpYur9-495GPTSc-rxT-NPoDm1rZ7uASFrdlWwDiTkcAyFns2utviMIh7Kq1BgAA
+                  ports:
+                      - containerPort: 8085
+                  resources:
+                      requests:
+                          memory: "32Mi"
+                          cpu: "125m"
+                      limits:
+                          memory: "64Mi"
+                          cpu: "250m"
+                  livenessProbe:
+                    httpGet:
+                        path: /api/login/liveness-check
+                        port: 8085
                     initialDelaySeconds: 10
                     periodSeconds: 5
 ---
@@ -335,3 +387,15 @@ spec:
         - protocol: TCP
           port: 8084
           targetPort: 8084
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: login
+spec:
+    selector:
+        app: login
+    ports:
+        - protocol: TCP
+          port: 8085
+          targetPort: 8085

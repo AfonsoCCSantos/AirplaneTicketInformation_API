@@ -7,11 +7,11 @@ from dotenv import find_dotenv, load_dotenv
 # AUTH0_CLIENT_ID="oyp940gN2eaffEZjgdHvFKSCfprngFmY"
 # AUTH0_CLIENT_SECRET="_bb5JwYk_enfIaVrWt9kKqLDcwWSKAt--zLDHJAZOULdrnMwmrgtjD3FJhITSRAz"
 # AUTH0_DOMAIN="dev-yq8vieybb3gnrzif.eu.auth0.com"
-APP_SECRET_KEY="699b3d871c8e5daa1cd5a2bf6e2b9bf436a05b469bc61885a6a9c5026b71047c"
+APP_SECRET_KEY = env.get("APP_SECRET_KEY")
 
-AUTH0_DOMAIN="tomasbarreto.eu.auth0.com"
-AUTH0_CLIENT_ID="IEvRaY6CXjAAT4UElgICkfN12DydX71a"
-AUTH0_CLIENT_SECRET="CpYur9-495GPTSc-rxT-NPoDm1rZ7uASFrdlWwDiTkcAyFns2utviMIh7Kq1BgAA"
+AUTH0_DOMAIN = env.get("AUTH0_DOMAIN")
+AUTH0_CLIENT_ID = env.get("AUTH0_CLIENT_ID")
+AUTH0_CLIENT_SECRET = env.get("AUTH0_CLIENT_SECRET")
 
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
@@ -59,3 +59,7 @@ def logout():
             quote_via=quote_plus,
         )
     )
+
+@app.route("/api/login/liveness-check", methods=['GET'])
+def liveness_check():
+    return "ok",200
