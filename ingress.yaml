@@ -54,3 +54,10 @@ spec:
               name: authentication
               port:
                 number: 8085
+        - path: /callback
+          pathType: Prefix
+          backend:
+            service:
+              name: authentication
+              port:
+                number: 8085

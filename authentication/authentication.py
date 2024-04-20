@@ -37,10 +37,10 @@ def see_token():
 @app.route("/api/authentication/login")
 def login():
     return oauth.auth0.authorize_redirect(
-        redirect_uri=url_for("api/authentication/callback", _external=True)
+        redirect_uri=url_for("callback", _external=True)
     )
 
-@app.route("/api/authentication/callback", methods=["GET", "POST"])
+@app.route("/callback", methods=["GET", "POST"])
 def callback():
     token = oauth.auth0.authorize_access_token()
     session["user"] = token
