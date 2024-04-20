@@ -3,15 +3,16 @@ from urllib.parse import quote_plus, urlencode
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
+import os
 
 # AUTH0_CLIENT_ID="oyp940gN2eaffEZjgdHvFKSCfprngFmY"
 # AUTH0_CLIENT_SECRET="_bb5JwYk_enfIaVrWt9kKqLDcwWSKAt--zLDHJAZOULdrnMwmrgtjD3FJhITSRAz"
 # AUTH0_DOMAIN="dev-yq8vieybb3gnrzif.eu.auth0.com"
-APP_SECRET_KEY = env.get("APP_SECRET_KEY")
+APP_SECRET_KEY = os.getenv("APP_SECRET_KEY")
 
-AUTH0_DOMAIN = env.get("AUTH0_DOMAIN")
-AUTH0_CLIENT_ID = env.get("AUTH0_CLIENT_ID")
-AUTH0_CLIENT_SECRET = env.get("AUTH0_CLIENT_SECRET")
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN")
+AUTH0_CLIENT_ID = os.getenv("AUTH0_CLIENT_ID")
+AUTH0_CLIENT_SECRET = os.getenv("AUTH0_CLIENT_SECRET")
 
 app = Flask(__name__)
 app.secret_key = APP_SECRET_KEY
@@ -36,10 +37,10 @@ def see_token():
 @app.route("/api/authentication/login")
 def login():
     return oauth.auth0.authorize_redirect(
-        redirect_uri=url_for("/api/authentication/callback", _external=True)
+        redirect_uri=url_for("callback", _external=True)
     )
 
-@app.route("/api/authentication/callback", methods=["GET", "POST"])
+@app.route("/callback", methods=["GET", "POST"])
 def callback():
     token = oauth.auth0.authorize_access_token()
     session["user"] = token

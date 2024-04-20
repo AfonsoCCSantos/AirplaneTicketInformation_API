@@ -43,6 +43,6 @@ cd visualization
 ./run.sh
 cd ..
 
-cd login
+cd authentication
 ./run.sh
 cd ..
