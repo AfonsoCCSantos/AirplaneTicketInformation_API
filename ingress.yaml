@@ -47,3 +47,10 @@ spec:
               name: visualization
               port:
                 number: 8084
+        - path: /api/authentication
+          pathType: Prefix
+          backend:
+            service:
+              name: authentication
+              port:
+                number: 8085

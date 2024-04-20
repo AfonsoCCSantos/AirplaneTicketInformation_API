@@ -263,22 +263,22 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: login
+    name: authentication
     labels:
-        app: login
+        app: authentication
 spec:
     replicas: 1
     selector:
         matchLabels:
-            app: login
+            app: authentication
     template:
         metadata:
             labels:
-                app: login
+                app: authentication
         spec:
             containers:
-                - name: login-container
-                  image: alexandrefigueired0/login-container:latest
+                - name: authentication-container
+                  image: alexandrefigueired0/authentication-container:latest
                   env:
                       - name: APP_SECRET_KEY
                         value: 699b3d871c8e5daa1cd5a2bf6e2b9bf436a05b469bc61885a6a9c5026b71047c
@@ -299,7 +299,7 @@ spec:
                           cpu: "250m"
                   livenessProbe:
                     httpGet:
-                        path: /api/login/liveness-check
+                        path: /api/authentication/liveness-check
                         port: 8085
                     initialDelaySeconds: 10
                     periodSeconds: 5
@@ -391,10 +391,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-    name: login
+    name: authentication
 spec:
     selector:
-        app: login
+        app: authentication
     ports:
         - protocol: TCP
           port: 8085

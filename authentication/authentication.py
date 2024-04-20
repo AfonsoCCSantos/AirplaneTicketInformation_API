@@ -27,30 +27,30 @@ oauth.register(
     server_metadata_url=f'https://{AUTH0_DOMAIN}/.well-known/openid-configuration'
 )
 
-@app.route("/see_id")
+@app.route("/api/authentication/see_id")
 def see_token():
     response = make_response()
     response.set_cookie("user_id", session["user"]["userinfo"]["sub"])
     return response
 
-@app.route("/login")
+@app.route("/api/authentication/login")
 def login():
     return oauth.auth0.authorize_redirect(
-        redirect_uri=url_for("callback", _external=True)
+        redirect_uri=url_for("/api/authentication/callback", _external=True)
     )
 
-@app.route("/callback", methods=["GET", "POST"])
+@app.route("/api/authentication/callback", methods=["GET", "POST"])
 def callback():
     token = oauth.auth0.authorize_access_token()
     session["user"] = token
-    return redirect("/see_id")
+    return redirect("/api/authentication/see_id")
 
-@app.route("/logout")
+@app.route("/api/authentication/logout")
 def logout():
     session.clear()
     return redirect(
         "https://" + env.get("AUTH0_DOMAIN")
-        + "/v2/logout?"
+        + "/v2/api/authentication/logout?"
         + urlencode(
             {
                 "returnTo": url_for("home", _external=True),
@@ -60,6 +60,6 @@ def logout():
         )
     )
 
-@app.route("/api/login/liveness-check", methods=['GET'])
+@app.route("/api/authentication/liveness-check", methods=['GET'])
 def liveness_check():
     return "ok",200
