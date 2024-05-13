@@ -1,19 +1,19 @@
 #!/bin/bash
 
-docker tag database-visualization-container alexandrefigueired0/database-visualization-container
-docker tag database-ranking-container alexandrefigueired0/database-ranking-container 
-docker tag forecast-container alexandrefigueired0/forecast-container 
-docker tag management-container alexandrefigueired0/management-container 
-docker tag recommendations-container alexandrefigueired0/recommendations-container
-docker tag visualization-container alexandrefigueired0/visualization-container
-docker tag ranking-container alexandrefigueired0/ranking-container 
-docker tag authentication-container alexandrefigueired0/authentication-container
+docker tag database-visualization-container anotherraqueldomingos/database-visualization-container
+docker tag database-ranking-container anotherraqueldomingos/database-ranking-container 
+docker tag forecast-container anotherraqueldomingos/forecast-container 
+docker tag management-container anotherraqueldomingos/management-container 
+docker tag recommendations-container anotherraqueldomingos/recommendations-container
+docker tag visualization-container anotherraqueldomingos/visualization-container
+docker tag ranking-container anotherraqueldomingos/ranking-container 
+docker tag authentication-container anotherraqueldomingos/authentication-container
 
-docker push alexandrefigueired0/database-visualization-container
-docker push alexandrefigueired0/database-ranking-container
-docker push alexandrefigueired0/forecast-container
-docker push alexandrefigueired0/management-container
-docker push alexandrefigueired0/recommendations-container
-docker push alexandrefigueired0/visualization-container
-docker push alexandrefigueired0/ranking-container
-docker push alexandrefigueired0/authentication-container
+docker push anotherraqueldomingos/database-visualization-container
+docker push anotherraqueldomingos/database-ranking-container
+docker push anotherraqueldomingos/forecast-container
+docker push anotherraqueldomingos/management-container
+docker push anotherraqueldomingos/recommendations-container
+docker push anotherraqueldomingos/visualization-container
+docker push anotherraqueldomingos/ranking-container
+docker push anotherraqueldomingos/authentication-container
