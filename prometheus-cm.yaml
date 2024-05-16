@@ -9,3 +9,8 @@ scrape_configs:
       static_configs:
         - targets: ['visualization:8084']
 
+    - job_name: ranking
+      scrape_interval: 5s
+      static_configs:
+        - targets: ['ranking:8082']
+

@@ -361,6 +361,7 @@ metadata:
 spec:
     selector:
         app: ranking
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8082
