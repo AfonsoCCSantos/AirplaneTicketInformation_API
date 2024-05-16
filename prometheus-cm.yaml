@@ -14,3 +14,8 @@ scrape_configs:
       static_configs:
         - targets: ['ranking:8082']
 
+    - job_name: recommendations
+      scrape_interval: 5s
+      static_configs:
+        - targets: ['recommendations:8083']
+

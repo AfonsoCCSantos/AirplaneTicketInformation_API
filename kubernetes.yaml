@@ -374,6 +374,7 @@ metadata:
 spec:
     selector:
         app: recommendations
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8083
