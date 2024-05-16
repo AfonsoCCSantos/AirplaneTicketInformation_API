@@ -8,10 +8,11 @@ import json
 from urllib.parse import quote_plus, urlencode
 import time
 import random
+import psutil
 
 from authlib.integrations.flask_client import OAuth
 from dotenv import find_dotenv, load_dotenv
-from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter
+from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter, Gauge
 
 # AUTH0_CLIENT_ID="oyp940zif.eu.auth0.com"
 APP_SECRET_KEY=os.getenv("APP_SECRET_KEY")
@@ -35,7 +36,9 @@ oauth.register(
     server_metadata_url=f'https://{AUTH0_DOMAIN}/.well-known/openid-configuration'
 )
 
+# metrics
 request_counter = Counter("requests_counter_recommendations", "Total number of requests of recommendations")
+cpu_usage = Gauge('cpu_usage_percent_recommendations', 'CPU Usage Percentage of recommendations')
 
 @app.route("/api/recommendations/cheapest_airline/<departure>/<arrival>/<start_date>/<end_date>", methods=["GET"])
 def get_chepeast_airline(departure, arrival, start_date, end_date):
@@ -100,4 +103,5 @@ def liveness_check():
 
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
+    cpu_usage.set(psutil.cpu_percent())
     return generate_latest() 

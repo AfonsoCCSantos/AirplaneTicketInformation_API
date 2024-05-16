@@ -3,10 +3,11 @@ import grpc
 import os
 import time
 import random
+import psutil
 
 from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest
 from visualization_pb2_grpc import VisualizationStub
-from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter
+from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter, Gauge, CollectorRegistry
 
 app = Flask(__name__)
 
@@ -14,7 +15,11 @@ app = Flask(__name__)
 database_visualization_host = os.getenv("DATABASE_VISUALIZATION_HOST", "localhost")
 database_visualization_channel = grpc.insecure_channel(f"{database_visualization_host}:50051")
 database_visualization_client = VisualizationStub(database_visualization_channel)
+
+# prometheus metrics
 request_counter = Counter("requests_counter_visualization", "Total number of requests of visualization")
+cpu_usage = Gauge('cpu_usage_percent_visualization', 'CPU Usage Percentage of visualization')
+
 
 ##start_http_server(9050)
 
@@ -41,9 +46,6 @@ def get_airline_details(airline_code):
 
 @app.route("/api/visualization/liveness-check", methods=['GET'])
 def liveness_check():
-    rValue = random.random()
-    histogram.observe(rValue * 10)
-    time.sleep(rValue)
     return "ok",200
 
 # @app.route("/api/visualization/metrics", methods=['GET'])
@@ -52,4 +54,5 @@ def liveness_check():
 
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
+    cpu_usage.set(psutil.cpu_percent())
     return generate_latest() 

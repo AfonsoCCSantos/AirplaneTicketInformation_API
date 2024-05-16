@@ -7,3 +7,4 @@ requests
 python-dotenv>=0.19.2
 PyJWT
 prometheus_client
+psutil

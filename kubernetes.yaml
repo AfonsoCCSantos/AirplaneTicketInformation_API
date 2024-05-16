@@ -17,7 +17,7 @@ spec:
         spec:
             containers:
                 - name: database-visualization-container
-                  image: anotherraqueldomingos/database-visualization-container:latest
+                  image: alexandrefigueired0/database-visualization-container:latest
                   ports:
                       - containerPort: 50051
                   resources:
@@ -46,7 +46,7 @@ spec:
         spec:
             containers:
                 - name: database-ranking-container
-                  image: anotherraqueldomingos/database-ranking-container:latest
+                  image: alexandrefigueired0/database-ranking-container:latest
                   ports:
                       - containerPort: 50052
                   resources:
@@ -75,7 +75,7 @@ spec:
         spec:
             containers:
                 - name: forecast-container
-                  image: anotherraqueldomingos/forecast-container:latest
+                  image: alexandrefigueired0/forecast-container:latest
                   ports:
                       - containerPort: 8080
                   resources:
@@ -110,7 +110,7 @@ spec:
         spec:
             containers:
                 - name: management-container
-                  image: anotherraqueldomingos/management-container:latest
+                  image: alexandrefigueired0/management-container:latest
                   env:
                       - name: DATABASE_VISUALIZATION_HOST
                         value: database-visualization
@@ -158,7 +158,7 @@ spec:
         spec:
             containers:
                 - name: ranking-container
-                  image: anotherraqueldomingos/ranking-container:latest
+                  image: alexandrefigueired0/ranking-container:latest
                   env:
                       - name: DATABASE_RANKING_HOST
                         value: database-ranking
@@ -196,7 +196,7 @@ spec:
         spec:
             containers:
                 - name: recommendations-container
-                  image: anotherraqueldomingos/recommendations-container:latest
+                  image: alexandrefigueired0/recommendations-container:latest
                   ports:
                       - containerPort: 8083
                   env:
@@ -240,7 +240,7 @@ spec:
         spec:
             containers:
                 - name: visualization-container
-                  image: anotherraqueldomingos/visualization-container:latest
+                  image: alexandrefigueired0/visualization-container:latest
                   env:
                       - name: DATABASE_VISUALIZATION_HOST
                         value: database-visualization
@@ -278,7 +278,7 @@ spec:
         spec:
             containers:
                 - name: authentication-container
-                  image: anotherraqueldomingos/authentication-container:latest
+                  image: alexandrefigueired0/authentication-container:latest
                   env:
                       - name: APP_SECRET_KEY
                         value: 699b3d871c8e5daa1cd5a2bf6e2b9bf436a05b469bc61885a6a9c5026b71047c

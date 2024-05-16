@@ -7,6 +7,7 @@ from authlib.integrations.flask_oauth2 import ResourceProtector
 from validator import Auth0JWTBearerTokenValidator
 import time
 import random
+import psutil
 
 from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, \
                                  VisualizationDeleteRequest
@@ -15,7 +16,7 @@ from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTi
                          RankingInsertionRequest, RankingDeleteRequest, AirlineRanking
 from ranking_pb2_grpc import RankingStub
 from authlib.integrations.flask_client import OAuth
-from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter
+from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter, Gauge
 
 app = Flask(__name__)
 
@@ -50,6 +51,7 @@ oauth.register(
 )
 
 request_counter = Counter("requests_counter_management", "Total number of requests of management")
+cpu_usage = Gauge('cpu_usage_percent_management', 'CPU Usage Percentage of management')
 
 @app.route("/api/management/tickets/<access_token>", methods=['POST'])
 def add_tickets(access_token):
@@ -174,4 +176,5 @@ def liveness_check():
 
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
+    cpu_usage.set(psutil.cpu_percent())
     return generate_latest() 
