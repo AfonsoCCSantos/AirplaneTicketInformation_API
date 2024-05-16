@@ -19,3 +19,8 @@ scrape_configs:
       static_configs:
         - targets: ['recommendations:8083']
 
+    - job_name: management
+      scrape_interval: 5s
+      static_configs:
+        - targets: ['management:8081']
+
