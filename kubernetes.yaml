@@ -337,6 +337,7 @@ metadata:
 spec:
     selector:
         app: forecast
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8080

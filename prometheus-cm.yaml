@@ -24,3 +24,8 @@ scrape_configs:
       static_configs:
         - targets: ['management:8081']
 
+    - job_name: forecast
+      scrape_interval: 5s
+      static_configs:
+        - targets: ['forecast:8080']
+
