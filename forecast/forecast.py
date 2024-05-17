@@ -7,8 +7,10 @@ from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYP
 
 app = Flask(__name__)
 
+# metrics
 request_counter = Counter("requests_counter_forecast", "Total number of requests of forecast")
 cpu_usage = Gauge('cpu_usage_percent_forecast', 'CPU Usage Percentage of forecast')
+memory_usage = Gauge('memory_usage_percent_forecast', 'Memory Usage Percentage of forecast')
 
 @app.route("/api/forecast/chepeast/<departure>/<arrival>/<start_date>/<end_date>", methods=['GET'])
 def forecast_cheapest(departure, arrival, start_date, end_date):
@@ -22,4 +24,5 @@ def liveness_check():
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
     cpu_usage.set(psutil.cpu_percent())
+    memory_usage.set(psutil.virtual_memory().percent)
     return generate_latest() 

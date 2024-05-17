@@ -39,6 +39,7 @@ oauth.register(
 # metrics
 request_counter = Counter("requests_counter_recommendations", "Total number of requests of recommendations")
 cpu_usage = Gauge('cpu_usage_percent_recommendations', 'CPU Usage Percentage of recommendations')
+memory_usage = Gauge('memory_usage_percent_recommendations', 'Memory Usage Percentage of recommendations')
 
 @app.route("/api/recommendations/cheapest_airline/<departure>/<arrival>/<start_date>/<end_date>", methods=["GET"])
 def get_chepeast_airline(departure, arrival, start_date, end_date):
@@ -104,4 +105,5 @@ def liveness_check():
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
     cpu_usage.set(psutil.cpu_percent())
+    memory_usage.set(psutil.virtual_memory().percent)
     return generate_latest() 

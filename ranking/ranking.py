@@ -19,6 +19,7 @@ database_ranking_client = RankingStub(database_ranking_channel)
 # metrics
 request_counter = Counter("requests_counter_ranking", "Total number of requests of ranking")
 cpu_usage = Gauge('cpu_usage_percent_ranking', 'CPU Usage Percentage of ranking')
+memory_usage = Gauge('memory_usage_percent_ranking', 'Memory Usage Percentage of raking')
 
 @app.route("/api/ranking/airlines_by_ticket_price", methods=['GET'])
 def get_ranking_airlines_ticket_pricing():
@@ -36,4 +37,5 @@ def liveness_check():
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
     cpu_usage.set(psutil.cpu_percent())
+    memory_usage.set(psutil.virtual_memory().percent)
     return generate_latest()

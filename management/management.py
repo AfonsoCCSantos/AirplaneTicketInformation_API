@@ -50,8 +50,10 @@ oauth.register(
     server_metadata_url=f'https://{AUTH0_DOMAIN}/.well-known/openid-configuration'
 )
 
+# metrics
 request_counter = Counter("requests_counter_management", "Total number of requests of management")
 cpu_usage = Gauge('cpu_usage_percent_management', 'CPU Usage Percentage of management')
+memory_usage = Gauge('memory_usage_percent_management', 'Memory Usage Percentage of management')
 
 @app.route("/api/management/tickets/<access_token>", methods=['POST'])
 def add_tickets(access_token):
@@ -177,4 +179,5 @@ def liveness_check():
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
     cpu_usage.set(psutil.cpu_percent())
+    memory_usage.set(psutil.virtual_memory().percent)
     return generate_latest() 

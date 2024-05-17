@@ -19,9 +19,8 @@ database_visualization_client = VisualizationStub(database_visualization_channel
 # prometheus metrics
 request_counter = Counter("requests_counter_visualization", "Total number of requests of visualization")
 cpu_usage = Gauge('cpu_usage_percent_visualization', 'CPU Usage Percentage of visualization')
+memory_usage = Gauge('memory_usage_percent_visualization', 'Memory Usage Percentage of visualization')
 
-
-##start_http_server(9050)
 
 @app.route("/api/visualization/tickets/<departure>/<arrival>", methods=["GET"])
 def get_tickets_from_to(departure, arrival):
@@ -55,4 +54,5 @@ def liveness_check():
 @app.route("/metrics", methods=['GET'])
 def prometheus_metrics():
     cpu_usage.set(psutil.cpu_percent())
+    memory_usage.set(psutil.virtual_memory().percent)
     return generate_latest() 
