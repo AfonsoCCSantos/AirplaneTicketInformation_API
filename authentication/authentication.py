@@ -33,9 +33,9 @@ oauth.register(
 )
 
 # metrics
-request_counter = Counter("requests_counter_forecast", "Total number of requests of forecast")
-cpu_usage = Gauge('cpu_usage_percent_forecast', 'CPU Usage Percentage of forecast')
-memory_usage = Gauge('memory_usage_percent_forecast', 'Memory Usage Percentage of forecast')
+request_counter = Counter("requests_counter_authentication", "Total number of requests of authentication")
+cpu_usage = Gauge('cpu_usage_percent_authentication', 'CPU Usage Percentage of authentication')
+memory_usage = Gauge('memory_usage_percent_authentication', 'Memory Usage Percentage of authentication')
 
 @app.route("/api/authentication/see_id")
 def see_token():
