@@ -5,6 +5,9 @@ import jwt
 import requests
 from authlib.integrations.flask_oauth2 import ResourceProtector
 from validator import Auth0JWTBearerTokenValidator
+import time
+import random
+import psutil
 
 from visualization_pb2 import Ticket, TicketsRequest, Airline, AirlineRequest, VisualizationInsertionRequest, \
                                  VisualizationDeleteRequest
@@ -13,6 +16,7 @@ from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTi
                          RankingInsertionRequest, RankingDeleteRequest, AirlineRanking
 from ranking_pb2_grpc import RankingStub
 from authlib.integrations.flask_client import OAuth
+from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter, Gauge
 
 # app = Flask(__name__)
 
@@ -47,8 +51,14 @@ oauth.register(
     server_metadata_url=f'https://{AUTH0_DOMAIN}/.well-known/openid-configuration'
 )
 
-@app.route("/api/management/tickets", methods=['POST'])
-def add_tickets():
+# metrics
+request_counter = Counter("requests_counter_management", "Total number of requests of management")
+cpu_usage = Gauge('cpu_usage_percent_management', 'CPU Usage Percentage of management')
+memory_usage = Gauge('memory_usage_percent_management', 'Memory Usage Percentage of management')
+
+@app.route("/api/management/tickets/<access_token>", methods=['POST'])
+def add_tickets(access_token):
+    request_counter.inc(1)
 
     headers = {
         "authorization": f"""Bearer {AUTH0_MANAGEMENT_TOKEN}"""
@@ -119,9 +129,10 @@ def add_tickets():
 
     return "Ticket added successfully"
 
-@app.route("/api/management/tickets/<leg_id>", methods=['DELETE'])
-def delete_ticket(leg_id):
-    
+@app.route("/api/management/tickets/<leg_id>/<access_token>", methods=['DELETE'])
+def delete_ticket(leg_id, access_token):
+    request_counter.inc(1)
+
     headers = {
         "authorization": f"""Bearer {AUTH0_MANAGEMENT_TOKEN}"""
     }
@@ -165,3 +176,9 @@ def delete_ticket(leg_id):
 @app.route("/api/management/liveness-check", methods=['GET'])
 def liveness_check():
     return "ok",200
+
+@app.route("/metrics", methods=['GET'])
+def prometheus_metrics():
+    cpu_usage.set(psutil.cpu_percent())
+    memory_usage.set(psutil.virtual_memory().percent)
+    return generate_latest() 

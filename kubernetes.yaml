@@ -337,6 +337,7 @@ metadata:
 spec:
     selector:
         app: forecast
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8080
@@ -349,6 +350,7 @@ metadata:
 spec:
     selector:
         app: management
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8081
@@ -361,6 +363,7 @@ metadata:
 spec:
     selector:
         app: ranking
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8082
@@ -373,6 +376,7 @@ metadata:
 spec:
     selector:
         app: recommendations
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8083
@@ -385,6 +389,7 @@ metadata:
 spec:
     selector:
         app: visualization
+    type: NodePort
     ports:
         - protocol: TCP
           port: 8084
