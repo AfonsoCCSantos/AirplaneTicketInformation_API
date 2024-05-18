@@ -29,3 +29,8 @@ scrape_configs:
       static_configs:
         - targets: ['forecast:8080']
 
+    - job_name: authentication
+      scrape_interval: 5s
+      static_configs:
+        - targets: ['forecast:8085']
+
