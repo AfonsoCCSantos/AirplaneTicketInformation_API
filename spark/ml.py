@@ -5,12 +5,13 @@ from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.regression import LinearRegression
 from pyspark.sql.functions import col
 from joblib import dump
+import numpy as np
 
 # create a SparkSession
 spark = SparkSession.builder.getOrCreate()
 
 #read the data
-data = spark.read.csv('subset_data2.csv', header=True, inferSchema=True)
+data = spark.read.csv('ml_model.csv', header=True, inferSchema=True)
 data = data.withColumn("flightDate", col("flightDate").cast("string"))
 # data.show()
 
@@ -26,6 +27,7 @@ indexer = StringIndexer(inputCol="destinationAirport", outputCol="destinationAir
 destinationAirportModel = indexer.fit(data)
 indexed_data= destinationAirportModel.transform(indexed_data)
 
+
 # print("//////////////////////////////////////////////////")
 # print("//////////////////////////////////////////////////")
 # print("//////////////////////////////////////////////////")
@@ -37,7 +39,7 @@ indexed_data= destinationAirportModel.transform(indexed_data)
 
 
 # create features vector
-feature_columns = indexed_data.columns[-3:] # here we omit the final column
+feature_columns = indexed_data.columns[-3:] # 
 assembler = VectorAssembler(inputCols=feature_columns,outputCol="features")
 data_2 = assembler.transform(indexed_data)
 # data_2.show()
@@ -46,12 +48,12 @@ train, test = data_2.randomSplit([0.7, 0.3])
 
 algo = LinearRegression(featuresCol="features", labelCol="totalFare")
 model = algo.fit(train)
-model.save("ticket_price_pred")
-flightDateModel.save("flightDateModel")
-startingAirportModel.save("startingAirportModel")
-destinationAirportModel.save("destinationAirportModel")
+# model.save("ticket_price_pred")
+# flightDateModel.save("flightDateModel")
+# startingAirportModel.save("startingAirportModel")
+# destinationAirportModel.save("destinationAirportModel")
 
-evaluation_summary = model.evaluate(test)
+# evaluation_summary = model.evaluate(test)
 # print("---------------------------------------------------------------------------------------------")
 # print("---------------------------------------------------------------------------------------------")
 # print("---------------------------------------------------------------------------------------------")
@@ -64,17 +66,63 @@ evaluation_summary = model.evaluate(test)
 # print("---------------------------------------------------------------------------------------------")
 # print("---------------------------------------------------------------------------------------------")
 
-# def pred_ticket_price_in_date_start_end_airport(date, startingAirport, destinationAirport):
-#     df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport}])
+def pred_ticket_price_in_date_start_end_airport(date, startingAirport, destinationAirport):
+    df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport}])
 
-#     fdJob = flightDateModel.transform(df)
-#     saJob = startingAirportModel.transform(fdJob)
-#     daJob = destinationAirportModel.transform(saJob)
+    fdJob = flightDateModel.transform(df)
+    saJob = startingAirportModel.transform(fdJob)
+    daJob = destinationAirportModel.transform(saJob)
 
-#     data_3 = assembler.transform(daJob)
+    data_3 = assembler.transform(daJob)
 
-#     predictions = model.transform(data_3)
+    predictions = model.transform(data_3)
 
-#     return predictions.first()[-1]
+    return predictions.first()[-1]
 
-# price = pred_ticket_price_in_date_start_end_airport("2022-04-08", "BOS", "ATL")
+price = pred_ticket_price_in_date_start_end_airport("2022-04-08", "BOS", "ATL")
+print(price)
+
+#########################################################################################
+indexer = StringIndexer(inputCol="segmentsAirlineCode", outputCol="segmentsAirlineCode_indexed")
+airlineModel = indexer.fit(indexed_data)
+indexed_data = airlineModel.transform(indexed_data)
+
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+# indexed_data.show()
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+
+# create features vector
+feature_columns = indexed_data.columns[4:8] # 
+print("////////////////////////////")
+print(feature_columns)
+print("////////////////////////////")
+assembler_airlines = VectorAssembler(inputCols=feature_columns,outputCol="features")
+data_3 = assembler_airlines.transform(indexed_data)
+# data_3.show()
+
+train, test = data_3.randomSplit([0.7, 0.3])
+
+algo = LinearRegression(featuresCol="features", labelCol="segmentsAirlineCode_indexed")
+model_arilines = algo.fit(train)
+
+def pred_airline_based_in_price_date_start_end_airport(date, startingAirport, destinationAirport):
+    price = pred_ticket_price_in_date_start_end_airport("2022-04-08", "BOS", "ATL")
+    df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport, "totalFare": price}])
+
+    fdJob = flightDateModel.transform(df)
+    saJob = startingAirportModel.transform(fdJob)
+    daJob = destinationAirportModel.transform(saJob)
+    acJob = airlineModel.transform(daJob)
+
+    data_3 = assembler_airlines.transform(acJob)
+
+    predictions = model_arilines.transform(data_3)
+
+    return predictions.first()[-1]
+
+airline = pred_airline_based_in_price_date_start_end_airport("2022-04-08", "BOS", "ATL")
+print(f"airline {airline}")
