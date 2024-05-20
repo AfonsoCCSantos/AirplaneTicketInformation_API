@@ -19,10 +19,10 @@ from datetime import datetime, timedelta
 spark = SparkSession.builder.getOrCreate()
 
 # Load the saved models
-model = LinearRegressionModel.load("../spark/ticket_price_pred.model")
-flightDateModel = StringIndexerModel.load("../spark/flightDateModel")
-startingAirportModel = StringIndexerModel.load("../spark/startingAirportModel")
-destinationAirportModel = StringIndexerModel.load("../spark/destinationAirportModel")
+model = LinearRegressionModel.load("/forecast/ml_models/ticket_price_pred")
+flightDateModel = StringIndexerModel.load("/forecast/ml_models/flightDateModel")
+startingAirportModel = StringIndexerModel.load("/forecast/ml_models/startingAirportModel")
+destinationAirportModel = StringIndexerModel.load("/forecast/ml_models/destinationAirportModel")
 
 
 app = Flask(__name__)
@@ -39,6 +39,7 @@ def get_next_day(date_str):
     return next_day_str
 
 def pred_ticket_price_in_date_start_end_airport(date, startingAirport, destinationAirport):
+    assembler = VectorAssembler(inputCols=["flightDate_indexed", "startingAirport_indexed", "destinationAirport_indexed"], outputCol="features")
     df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport}])
 
     # Apply the same StringIndexer models
@@ -55,11 +56,11 @@ def pred_ticket_price_in_date_start_end_airport(date, startingAirport, destinati
 @app.route("/api/forecast/chepeast/<departure>/<arrival>/<start_date>/<end_date>", methods=['GET'])
 def forecast_cheapest(departure, arrival, start_date, end_date):
     request_counter.inc(1)
-    res = pred_ticket_price_in_date_start_end_airport(start_date, startingAirport, destinationAirport)
+    res = pred_ticket_price_in_date_start_end_airport(start_date, departure, arrival)
     curr_date = get_next_day(start_date)
 
     while curr_date != get_next_day(end_date):
-        price = pred_ticket_price_in_date_start_end_airport(curr_date, startingAirport, destinationAirport)
+        price = pred_ticket_price_in_date_start_end_airport(curr_date, departure, arrival)
         res = price if price < res else res
 
         curr_date = get_next_day(curr_date)

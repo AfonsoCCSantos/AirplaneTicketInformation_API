@@ -1,3 +1,4 @@
+from pyspark import SparkContext
 from pyspark.sql import SparkSession
 from pyspark.ml.feature import StringIndexer
 from pyspark.ml.feature import VectorAssembler
@@ -45,7 +46,7 @@ train, test = data_2.randomSplit([0.7, 0.3])
 
 algo = LinearRegression(featuresCol="features", labelCol="totalFare")
 model = algo.fit(train)
-model.save("ticket_price_pred.model")
+model.save("ticket_price_pred")
 flightDateModel.save("flightDateModel")
 startingAirportModel.save("startingAirportModel")
 destinationAirportModel.save("destinationAirportModel")
