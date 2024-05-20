@@ -3,6 +3,7 @@ from pyspark.ml.feature import StringIndexer
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.regression import LinearRegression
 from pyspark.sql.functions import col
+from joblib import dump
 
 # create a SparkSession
 spark = SparkSession.builder.getOrCreate()
@@ -12,7 +13,7 @@ data = spark.read.csv('subset_data2.csv', header=True, inferSchema=True)
 data = data.withColumn("flightDate", col("flightDate").cast("string"))
 # data.show()
 
-indexer = StringIndexer(inputCol="flightDate", outputCol="flightDate_indexed")
+indexer = StringIndexer(inputCol="flightDate", outputCol="flightDate_indexed",  handleInvalid='keep')
 flightDateModel = indexer.fit(data)
 indexed_data= flightDateModel.transform(data)
 
@@ -24,78 +25,55 @@ indexer = StringIndexer(inputCol="destinationAirport", outputCol="destinationAir
 destinationAirportModel = indexer.fit(data)
 indexed_data= destinationAirportModel.transform(indexed_data)
 
-print("//////////////////////////////////////////////////")
-print("//////////////////////////////////////////////////")
-print("//////////////////////////////////////////////////")
-indexed_data.show()
-print("//////////////////////////////////////////////////")
-print("//////////////////////////////////////////////////")
-print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+# indexed_data.show()
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
+# print("//////////////////////////////////////////////////")
 
 
 
 # create features vector
 feature_columns = indexed_data.columns[-3:] # here we omit the final column
-print(feature_columns)
 assembler = VectorAssembler(inputCols=feature_columns,outputCol="features")
 data_2 = assembler.transform(indexed_data)
-data_2.show()
+# data_2.show()
 
 train, test = data_2.randomSplit([0.7, 0.3])
 
 algo = LinearRegression(featuresCol="features", labelCol="totalFare")
 model = algo.fit(train)
+model.save("ticket_price_pred.model")
+flightDateModel.save("flightDateModel")
+startingAirportModel.save("startingAirportModel")
+destinationAirportModel.save("destinationAirportModel")
 
 evaluation_summary = model.evaluate(test)
-print("---------------------------------------------------------------------------------------------")
-print("---------------------------------------------------------------------------------------------")
-print("---------------------------------------------------------------------------------------------")
-print("---------------------------------------------------------------------------------------------")
-print(evaluation_summary.meanAbsoluteError)
-print(evaluation_summary.rootMeanSquaredError)
-print(evaluation_summary.r2)
-print("---------------------------------------------------------------------------------------------")
-print("---------------------------------------------------------------------------------------------")
-print("---------------------------------------------------------------------------------------------")
-print("---------------------------------------------------------------------------------------------")
+# print("---------------------------------------------------------------------------------------------")
+# print("---------------------------------------------------------------------------------------------")
+# print("---------------------------------------------------------------------------------------------")
+# print("---------------------------------------------------------------------------------------------")
+# print(evaluation_summary.meanAbsoluteError)
+# print(evaluation_summary.rootMeanSquaredError)
+# print(evaluation_summary.r2)
+# print("---------------------------------------------------------------------------------------------")
+# print("---------------------------------------------------------------------------------------------")
+# print("---------------------------------------------------------------------------------------------")
+# print("---------------------------------------------------------------------------------------------")
 
-# 2022-08-02|            PHL|               OAK
-# [17.0,8.0,14.0]
-# df_fd = spark.createDataFrame([
-#     {"flightDate": "2022-08-02"}
-# ])
+# def pred_ticket_price_in_date_start_end_airport(date, startingAirport, destinationAirport):
+#     df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport}])
 
-# df_sa = spark.createDataFrame([
-#     {"startingAirport": "PHL"}
-# ])
+#     fdJob = flightDateModel.transform(df)
+#     saJob = startingAirportModel.transform(fdJob)
+#     daJob = destinationAirportModel.transform(saJob)
 
-# df_da = spark.createDataFrame([
-#     {"destinationAirport": "OAK"}
-# ])
+#     data_3 = assembler.transform(daJob)
 
-df = spark.createDataFrame([{"flightDate": "2022-08-02", "startingAirport": "PHL", "destinationAirport": "OAK"}])
+#     predictions = model.transform(data_3)
 
-fdJob = flightDateModel.transform(df)
-saJob = startingAirportModel.transform(fdJob)
-daJob = destinationAirportModel.transform(saJob)
+#     return predictions.first()[-1]
 
-
-# print("*****************************************************************")
-# print("*****************************************************************")
-# print("*****************************************************************")
-# print(fdJob.first()[-1]) # filtering out some
-# # print(fdJob.select(fdJob.columns[-1]).collect()) # filtering out some
-# print("*****************************************************************")
-# print("*****************************************************************")
-# print("*****************************************************************")
-
-# vec = VectorAssembler(inputCols=feature_columns,outputCol="features")
-data_3 = assembler.transform(daJob)
-
-print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
-predictions = model.transform(data_3)
-print(predictions.first()[-1])
-
-
+# price = pred_ticket_price_in_date_start_end_airport("2022-04-08", "BOS", "ATL")
