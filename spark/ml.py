@@ -83,9 +83,6 @@ price = pred_ticket_price_in_date_start_end_airport("2022-04-08", "BOS", "ATL")
 print(price)
 
 #########################################################################################
-indexer = StringIndexer(inputCol="segmentsAirlineCode", outputCol="segmentsAirlineCode_indexed")
-airlineModel = indexer.fit(indexed_data)
-indexed_data = airlineModel.transform(indexed_data)
 
 # print("//////////////////////////////////////////////////")
 # print("//////////////////////////////////////////////////")
@@ -96,33 +93,53 @@ indexed_data = airlineModel.transform(indexed_data)
 # print("//////////////////////////////////////////////////")
 
 # create features vector
-feature_columns = indexed_data.columns[4:8] # 
-print("////////////////////////////")
-print(feature_columns)
-print("////////////////////////////")
+# feature_columns = indexed_data.columns[4:8] # 
+# print("////////////////////////////")
+# print(feature_columns)
+# print("////////////////////////////")
 assembler_airlines = VectorAssembler(inputCols=feature_columns,outputCol="features")
 data_3 = assembler_airlines.transform(indexed_data)
 # data_3.show()
 
 train, test = data_3.randomSplit([0.7, 0.3])
 
-algo = LinearRegression(featuresCol="features", labelCol="segmentsAirlineCode_indexed")
+algo = LinearRegression(featuresCol="features", labelCol="segmentsAirlineCode")
 model_arilines = algo.fit(train)
 
+airlines_mapper = {
+    0:"UA",
+    1:"DL",
+    2:"AA",
+    3:"NK",
+    4:"B6",
+    5:"AS",
+    6:"F9",
+    7:"SY",
+    8:"9K",
+    9:"9X",
+    10:"4B",
+    11:"LF",
+    12:"KG",
+    13:"HA"
+}
+
 def pred_airline_based_in_price_date_start_end_airport(date, startingAirport, destinationAirport):
-    price = pred_ticket_price_in_date_start_end_airport("2022-04-08", "BOS", "ATL")
+    price = 327.11446416041747#pred_ticket_price_in_date_start_end_airport("2022-04-08", "BOS", "ATL")
     df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport, "totalFare": price}])
+    df.show()
 
     fdJob = flightDateModel.transform(df)
     saJob = startingAirportModel.transform(fdJob)
     daJob = destinationAirportModel.transform(saJob)
-    acJob = airlineModel.transform(daJob)
 
-    data_3 = assembler_airlines.transform(acJob)
+    data_3 = assembler_airlines.transform(daJob)
 
     predictions = model_arilines.transform(data_3)
 
-    return predictions.first()[-1]
+    airline_nmbr = round(float(predictions.first()[-1]))
+    return airlines_mapper[airline_nmbr]
 
-airline = pred_airline_based_in_price_date_start_end_airport("2022-04-08", "BOS", "ATL")
+airline = pred_airline_based_in_price_date_start_end_airport("2022-09-13", "DTW", "LAX")
 print(f"airline {airline}")
+
+# model_arilines.save("airline_price_pred")
