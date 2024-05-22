@@ -121,27 +121,27 @@ def pred_airline_based_in_price_date_start_end_airport(date, startingAirport, de
 def get_chepeast_airline(departure, arrival, start_date, end_date):
     request_counter.inc(1)
 
-    # headers = {
-    #     "authorization": f"""Bearer {AUTH0_MANAGEMENT_TOKEN}"""
-    # }
+    headers = {
+        "authorization": f"""Bearer {AUTH0_MANAGEMENT_TOKEN}"""
+    }
 
-    # user_id = request.cookies.get("user_id")
-    # if not user_id:
-    #     return "Not authorized", 401
+    user_id = request.cookies.get("user_id")
+    if not user_id:
+        return "Not authorized", 401
     
-    # try:
-    #     response = requests.get(f"https://{AUTH0_DOMAIN}/api/v2/users/{user_id}/roles", headers=headers)
-    #     response = response.json()
-    # except Exception as e:
-    #     return "Not authorized", 401
+    try:
+        response = requests.get(f"https://{AUTH0_DOMAIN}/api/v2/users/{user_id}/roles", headers=headers)
+        response = response.json()
+    except Exception as e:
+        return "Not authorized", 401
 
-    # if not response:
-    #     return "Not authorized", 401
+    if not response:
+        return "Not authorized", 401
 
-    # hasPermission = response[0]['name'] in ['subscriber', 'admin']
+    hasPermission = response[0]['name'] in ['subscriber', 'admin']
 
-    # if not hasPermission:
-    #     return "Not authorized", 401
+    if not hasPermission:
+        return "Not authorized", 401
 
     res = pred_ticket_price_in_date_start_end_airport(start_date, departure, arrival)
     curr_date = get_next_day(start_date)
@@ -181,7 +181,20 @@ def get_chepeast_date(departure, arrival, start_date, end_date):
     if not hasPermission:
         return "Not authorized", 401
 
-    return "recommendation for the cheapest date to fly"
+    res = pred_ticket_price_in_date_start_end_airport(start_date, departure, arrival)
+    date = start_date
+
+    curr_date = get_next_day(start_date)
+
+    while curr_date != get_next_day(end_date):
+        price = pred_ticket_price_in_date_start_end_airport(curr_date, departure, arrival)
+        if price < res:
+            res = price
+            date = curr_date
+
+        curr_date = get_next_day(curr_date)
+    
+    return f"recommendation for the cheapest date to fly: {date}"
 
 @app.route("/api/recommendations/liveness-check", methods=['GET'])
 def liveness_check():
