@@ -81,6 +81,8 @@ When adding a ticket, multiple entries representing airlines and the relation of
 For this phase, the services that require machine learning algorithms have still not been implemented. We plan to implement these services on a later phase using Spark.
 <br><br>
 There are some endpoints that require authentication to work (The endpoints from the recommendation and the management services). We aim to present the user with a login page when he tries to access these endpoints, being redirected (with his token obtained from the login) to the endpoint he initially tried to access. As of now, the user must get the token beforehand and pass it in the URL of the endpoints that require authentication. 
+<br> 
+Spark isn't configured as wished. The requests regarding machine learning models aren't being ran parallely in a spark environment.
 
 
 
