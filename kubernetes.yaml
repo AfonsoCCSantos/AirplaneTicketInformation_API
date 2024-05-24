@@ -78,13 +78,24 @@ spec:
                   image: alexandrefigueired0/forecast-container:latest
                   ports:
                       - containerPort: 8080
-
+                #   resources:
+                #       requests:
+                #           memory: "512Mi"
+                #           cpu: "125m"
+                #       limits:
+                #           memory: "1024Mi"
+                #           cpu: "250m"
+                #   readinessProbe:
+                #       httpGet:
+                #           path: /api/forecast/liveness-check
+                #           port: 8080
+                #       initialDelaySeconds: 120
+                #       periodSeconds: 10
                 #   livenessProbe:
                 #       httpGet:
                 #           path: /api/forecast/liveness-check
                 #           port: 8080
-                #       initialDelaySeconds: 180
-                #       periodSeconds: 15
+                #       periodSeconds: 80
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -251,13 +262,24 @@ spec:
                             secretKeyRef:
                                 name: secret-prod
                                 key: AUTH0_CLIENT_SECRET
-
+                #   resources:
+                #       requests:
+                #           memory: "512Mi"
+                #           cpu: "125m"
+                #       limits:
+                #           memory: "1024Mi"
+                #           cpu: "250m"
+                #   readinessProbe:
+                #       httpGet:
+                #           path: /api/recommendations/liveness-check
+                #           port: 8083
+                #       initialDelaySeconds: 120
+                #       periodSeconds: 10
                 #   livenessProbe:
                 #       httpGet:
                 #           path: /api/recommendations/liveness-check
                 #           port: 8083
-                #       initialDelaySeconds: 30
-                #       periodSeconds: 10
+                #       periodSeconds: 80
                   volumeMounts:
                       - name: secrets
                         mountPath: "/secrets"
