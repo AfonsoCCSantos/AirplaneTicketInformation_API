@@ -5,4 +5,4 @@ from locust import HttpUser, task
 class HelloWorldUser(HttpUser):
     @task
     def view_airline(self):
-        self.client.get("http://34.90.162.14/api/visualization/airlines/DL")
+        self.client.get("/api/visualization/airlines/DL")
