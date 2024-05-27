@@ -198,13 +198,13 @@ spec:
                                 key: DATABASE_RANKING_HOST
                   ports:
                       - containerPort: 8082
-                  resources:
+                  resources: #reduzido para 1/4
                       requests:
-                          memory: "32Mi"
-                          cpu: "125m"
+                          memory: "8Mi" 
+                          cpu: "32m"
                       limits:
-                          memory: "64Mi"
-                          cpu: "250m"
+                          memory: "16Mi"
+                          cpu: "62m"
                   livenessProbe:
                       httpGet:
                           path: /api/ranking/liveness-check
@@ -316,13 +316,13 @@ spec:
                                 key: DATABASE_VISUALIZATION_HOST
                   ports:
                       - containerPort: 8084
-                  resources:
+                  resources: #reduzido para 1/4
                       requests:
-                          memory: "32Mi"
-                          cpu: "125m"
+                          memory: "8Mi" 
+                          cpu: "32m"
                       limits:
-                          memory: "64Mi"
-                          cpu: "250m"
+                          memory: "16Mi"
+                          cpu: "62m"
                   livenessProbe:
                       httpGet:
                           path: /api/visualization/liveness-check
