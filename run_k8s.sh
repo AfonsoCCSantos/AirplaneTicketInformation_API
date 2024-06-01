@@ -5,7 +5,8 @@ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/cont
 # kubectl get pods --namespace=ingress-nginx
 kubectl wait --namespace ingress-nginx \
  --for=condition=ready pod \
- --selector=app.kubernetes.io/component=controller
+ --selector=app.kubernetes.io/component=controller \
+ --timeout=300s
 
 kubectl apply -f ingress.yaml
 kubectl apply -f kubernetes.yaml

@@ -4,6 +4,7 @@ kubectl apply -f components.yaml
 kubectl wait --namespace kube-system \
  --for=condition=ready pod \
  --selector=k8s-app=metrics-server \
+ --timeout=300s
 
 kubectl create configmap prometheus-cm --from-file prometheus-cm.yaml
 kubectl apply -f prometheus.yaml
@@ -11,6 +12,7 @@ kubectl apply -f prometheus.yaml
 # wait for prometheus to run
 kubectl wait --namespace default \
   --for=condition=available deployment/prometheus-deployment \
+ --timeout=300s
 
 kubectl port-forward service/prometheus-svc 8000:9090
 
