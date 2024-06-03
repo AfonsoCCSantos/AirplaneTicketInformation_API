@@ -1,5 +1,5 @@
 docker stop database-ranking-container
-docker stop database-ranking-container
+docker stop database-visualization-container
 docker stop forecast-container
 docker stop management-container
 docker stop ranking-container

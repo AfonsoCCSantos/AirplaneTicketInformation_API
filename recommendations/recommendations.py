@@ -25,6 +25,7 @@ from pyspark.sql import SparkSession
 from pyspark.ml.feature import StringIndexerModel, VectorAssembler
 from pyspark.ml.regression import LinearRegressionModel
 from datetime import datetime, timedelta
+import functools
 
 # AUTH0_CLIENT_ID="oyp940zif.eu.auth0.com"
 APP_SECRET_KEY=os.getenv("APP_SECRET_KEY")
@@ -87,7 +88,7 @@ def get_next_day(date_str):
     next_day_str = next_day_obj.strftime('%Y-%m-%d')
     return next_day_str
 
-
+@functools.lru_cache(maxsize=366)
 def pred_ticket_price_in_date_start_end_airport(date, startingAirport, destinationAirport):
     assembler = VectorAssembler(inputCols=["flightDate_indexed", "startingAirport_indexed", "destinationAirport_indexed"], outputCol="features")
     df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport}])
