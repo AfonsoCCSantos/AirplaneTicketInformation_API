@@ -22,11 +22,11 @@ spec:
                       - containerPort: 50051
                   resources:
                       requests:
-                          memory: "32Mi"
-                          cpu: "125m"
+                          memory: "48Mi"
+                          cpu: "20m"
                       limits:
                           memory: "64Mi"
-                          cpu: "250m"
+                          cpu: "40m"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -51,11 +51,11 @@ spec:
                       - containerPort: 50052
                   resources:
                       requests:
-                          memory: "32Mi"
-                          cpu: "125m"
+                          memory: "48Mi"
+                          cpu: "20m"
                       limits:
                           memory: "64Mi"
-                          cpu: "250m"
+                          cpu: "40m"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -81,10 +81,10 @@ spec:
                   resources:
                       requests:
                           memory: "512Mi"
-                          cpu: "125m"
-                      limits:
-                          memory: "3072Mi"
                           cpu: "500m"
+                      limits:
+                          memory: "768Mi"
+                          cpu: "750m"
                   readinessProbe:
                       httpGet:
                           path: /api/forecast/liveness-check
@@ -151,16 +151,16 @@ spec:
                       - containerPort: 8081
                   resources:
                       requests:
-                          memory: "32Mi"
-                          cpu: "125m"
+                          memory: "48Mi"
+                          cpu: "100m"
                       limits:
                           memory: "64Mi"
-                          cpu: "250m"
+                          cpu: "200m"
                   livenessProbe:
                       httpGet:
                           path: /api/management/liveness-check
                           port: 8081
-                      initialDelaySeconds: 10
+                      initialDelaySeconds: 60
                       periodSeconds: 5
                   volumeMounts:
                       - name: secrets
@@ -198,18 +198,18 @@ spec:
                                 key: DATABASE_RANKING_HOST
                   ports:
                       - containerPort: 8082
-                  resources: #reduzido para 1/4
+                  resources:
                       requests:
-                          memory: "8Mi" 
-                          cpu: "32m"
+                          memory: "64Mi" 
+                          cpu: "20m"
                       limits:
-                          memory: "16Mi"
-                          cpu: "62m"
+                          memory: "128Mi"
+                          cpu: "40m"
                   livenessProbe:
                       httpGet:
                           path: /api/ranking/liveness-check
                           port: 8082
-                      initialDelaySeconds: 10
+                      initialDelaySeconds: 60
                       periodSeconds: 5
                   volumeMounts:
                       - name: secrets
@@ -264,11 +264,11 @@ spec:
                                 key: AUTH0_CLIENT_SECRET
                   resources:
                       requests:
-                          memory: "512Mi"
-                          cpu: "125m"
+                          memory: "768Mi"
+                          cpu: "550m"
                       limits:
-                          memory: "3072Mi"
-                          cpu: "500m"
+                          memory: "1024Mi"
+                          cpu: "750m"
                   readinessProbe:
                       httpGet:
                           path: /api/recommendations/liveness-check
@@ -316,18 +316,18 @@ spec:
                                 key: DATABASE_VISUALIZATION_HOST
                   ports:
                       - containerPort: 8084
-                  resources: #reduzido para 1/4
+                  resources:
                       requests:
-                          memory: "8Mi" 
-                          cpu: "32m"
+                          memory: "64Mi" 
+                          cpu: "20m"
                       limits:
-                          memory: "16Mi"
-                          cpu: "62m"
+                          memory: "128Mi"
+                          cpu: "40m"
                   livenessProbe:
                       httpGet:
                           path: /api/visualization/liveness-check
                           port: 8084
-                      initialDelaySeconds: 10
+                      initialDelaySeconds: 60
                       periodSeconds: 5
                   volumeMounts:
                       - name: secrets
@@ -384,16 +384,16 @@ spec:
                       - containerPort: 8085
                   resources:
                       requests:
-                          memory: "32Mi"
-                          cpu: "125m"
+                          memory: "48Mi"
+                          cpu: "100m"
                       limits:
                           memory: "64Mi"
-                          cpu: "250m"
+                          cpu: "200m"
                   livenessProbe:
                       httpGet:
                           path: /api/authentication/liveness-check
                           port: 8085
-                      initialDelaySeconds: 10
+                      initialDelaySeconds: 60
                       periodSeconds: 5
                   volumeMounts:
                       - name: secrets

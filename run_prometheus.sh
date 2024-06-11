@@ -11,8 +11,15 @@ kubectl apply -f prometheus.yaml
 
 # wait for prometheus to run
 kubectl wait --namespace default \
-  --for=condition=available deployment/prometheus-deployment \
- --timeout=300s
+  --for=condition=ready pod \
+  --selector=app=prometheus \
+  --timeout=300s
 
-kubectl port-forward service/prometheus-svc 8000:9090
+kubectl apply -f grafana.yaml
+kubectl wait --namespace default \
+  --for=condition=ready pod \
+  --selector=app=grafana,purpose=monitoring-demo \
+  --timeout=300s
+kubectl port-forward service/grafana-svc 8000:3000
+
 
