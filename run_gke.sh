@@ -1,5 +1,22 @@
+if [ -z "$1" ]; then
+    echo "No parameter provided."
+    exit 1
+fi
+
+if [ $1 = "alex" ]; then
+    PROJECT_ID="disco-parsec-415719"
+elif [ $1 = "afonso" ]; then
+    PROJECT_ID="fcul123-415719"
+elif [ $1 = "raquel" ]; then
+    PROJECT_ID="fcul-2024-cn"
+elif [ $1 = "tomas" ]; then
+    PROJECT_ID="cloudcomputing111"
+elif [ $1 = "miguel" ]; then
+    PROJECT_ID="cloudcomputing-415913"
+fi
+echo $PROJECT_ID
 gcloud auth login
-gcloud config set project disco-parsec-415719
+gcloud config set project $PROJECT_ID
 
 # default MACHINE_TYPE: e2-medium
 # gcloud container clusters create-auto cn19-cluster --region=europe-west4 #nmbr nodes, tipo de maquina
