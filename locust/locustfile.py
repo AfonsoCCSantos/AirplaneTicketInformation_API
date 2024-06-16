@@ -9,6 +9,6 @@ class SystemTestUser(HttpUser):
     def view_ranking(self):
         self.client.get("/api/ranking/airlines_by_ticket_price")
     
-    @task
-    def view_forecast(self):
-        self.client.get("/api/forecast/chepeast/BOS/ATL/2024-08-10/2024-08-20")
+    # @task
+    # def view_forecast(self):
+    #     self.client.get("/api/forecast/chepeast/BOS/ATL/2024-08-10/2024-08-20")

@@ -3,8 +3,6 @@ import grpc
 import os
 import jwt
 import requests
-from authlib.integrations.flask_oauth2 import ResourceProtector
-from validator import Auth0JWTBearerTokenValidator
 import time
 import random
 import psutil
@@ -15,7 +13,6 @@ from visualization_pb2_grpc import VisualizationStub
 from ranking_pb2 import AirlinesRankingByTicketPriceRequest, AirlinesRankingByTicketPriceResponse, \
                          RankingInsertionRequest, RankingDeleteRequest, AirlineRanking
 from ranking_pb2_grpc import RankingStub
-from authlib.integrations.flask_client import OAuth
 from prometheus_client import start_http_server, Summary, Histogram, CONTENT_TYPE_LATEST, generate_latest, Counter, Gauge
 
 # app = Flask(__name__)
@@ -30,58 +27,17 @@ database_ranking_host = os.getenv("DATABASE_RANKING_HOST", "localhost")
 database_ranking_channel = grpc.insecure_channel(f"{database_ranking_host}:50052")
 database_ranking_client = RankingStub(database_ranking_channel)
 
-APP_SECRET_KEY=os.getenv("APP_SECRET_KEY")
-
-AUTH0_DOMAIN=os.getenv("AUTH0_DOMAIN")
-AUTH0_CLIENT_ID=os.getenv("AUTH0_CLIENT_ID")
-AUTH0_CLIENT_SECRET=os.getenv("AUTH0_CLIENT_SECRET")
-AUTH0_MANAGEMENT_TOKEN=os.getenv("AUTH0_MANAGEMENT_TOKEN")
-
 app = Flask(__name__)
-app.secret_key = APP_SECRET_KEY
-oauth = OAuth(app)
 
-oauth.register(
-    "auth0",
-    client_id=AUTH0_CLIENT_ID,
-    client_secret=AUTH0_CLIENT_SECRET,
-    client_kwargs={
-        "scope": "openid profile email",
-    },
-    server_metadata_url=f'https://{AUTH0_DOMAIN}/.well-known/openid-configuration'
-)
 
 # metrics
 request_counter = Counter("requests_counter_management", "Total number of requests of management")
 cpu_usage = Gauge('cpu_usage_percent_management', 'CPU Usage Percentage of management')
 memory_usage = Gauge('memory_usage_percent_management', 'Memory Usage Percentage of management')
 
-@app.route("/api/management/tickets/<access_token>", methods=['POST'])
-def add_tickets(access_token):
+@app.route("/api/management/tickets", methods=['POST'])
+def add_tickets():
     request_counter.inc(1)
-
-    headers = {
-        "authorization": f"""Bearer {AUTH0_MANAGEMENT_TOKEN}"""
-    }
-
-    user_id = request.cookies.get("user_id")
-    if not user_id:
-        return "Not authorized", 401
-    
-    try:
-        response = requests.get(f"https://{AUTH0_DOMAIN}/api/v2/users/{user_id}/roles", headers=headers)
-        response = response.json()
-    except Exception as e:
-        return "Not authorized", 401
-
-    if not response:
-        return "Not authorized", 401
-
-    hasPermission = response[0]['name'] in ['admin']
-
-    if not hasPermission:
-        return "Not authorized", 401
-
     request_body = request.json
 
     ticket_body = request_body["ticket"]
@@ -129,31 +85,9 @@ def add_tickets(access_token):
 
     return "Ticket added successfully"
 
-@app.route("/api/management/tickets/<leg_id>/<access_token>", methods=['DELETE'])
-def delete_ticket(leg_id, access_token):
+@app.route("/api/management/tickets/<leg_id>", methods=['DELETE'])
+def delete_ticket(leg_id):
     request_counter.inc(1)
-
-    headers = {
-        "authorization": f"""Bearer {AUTH0_MANAGEMENT_TOKEN}"""
-    }
-    
-    user_id = request.cookies.get("user_id")
-    if not user_id:
-        return "Not authorized", 401
-    
-    try:
-        response = requests.get(f"https://{AUTH0_DOMAIN}/api/v2/users/{user_id}/roles", headers=headers)
-        response = response.json()
-    except Exception as e:
-        return "Not authorized", 401
-
-    if not response:
-        return "Not authorized", 401
-
-    hasPermission = response[0]['name'] in ['admin']
-
-    if not hasPermission:
-        return "Not authorized", 401
 
     # Delete the ticket from the tickets database
     # tickets_response = database_visualization_client.DeleteTicket(TicketsRequest(ticket_id=ticketId))
