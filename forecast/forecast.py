@@ -41,8 +41,11 @@ def get_next_day(date_str):
 
 @functools.lru_cache(maxsize=366)
 def pred_ticket_price_in_date_start_end_airport(date, startingAirport, destinationAirport):
+    date_array = date.split("-")
+    date_array[0] = "2022"
+    date_formatted = "-".join(date_array)
     assembler = VectorAssembler(inputCols=["flightDate_indexed", "startingAirport_indexed", "destinationAirport_indexed"], outputCol="features")
-    df = spark.createDataFrame([{"flightDate": date, "startingAirport": startingAirport, "destinationAirport": destinationAirport}])
+    df = spark.createDataFrame([{"flightDate": date_formatted, "startingAirport": startingAirport, "destinationAirport": destinationAirport}])
 
     # Apply the same StringIndexer models
     fdJob = flightDateModel.transform(df)

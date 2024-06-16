@@ -7,9 +7,15 @@ metadata:
         app: database-visualization
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: database-visualization
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
@@ -36,9 +42,15 @@ metadata:
         app: database-ranking
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: database-ranking
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
@@ -65,9 +77,15 @@ metadata:
         app: forecast
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: forecast
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
@@ -105,9 +123,15 @@ metadata:
         app: management
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: management
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
@@ -179,9 +203,15 @@ metadata:
         app: ranking
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: ranking
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
@@ -228,9 +258,15 @@ metadata:
         app: recommendations
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: recommendations
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
@@ -297,9 +333,15 @@ metadata:
         app: visualization
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: visualization
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
@@ -346,9 +388,15 @@ metadata:
         app: authentication
 spec:
     replicas: 1
+    revisionHistoryLimit: 5
     selector:
         matchLabels:
             app: authentication
+    strategy: 
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 33%
     template:
         metadata:
             labels:
