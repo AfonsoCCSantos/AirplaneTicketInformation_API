@@ -76,14 +76,15 @@ Wait for the ingress-nginx-controller to start running, use the next command to 
 `kubectl get ingress` wait until an ip is attributed, to get the ip of where the application is running on <br>
 
 ### Logging and Monitoring
-The project uses Prometheus to register system logs, and Grafana to present graphs and other data related to said logs.
+The project uses Prometheus to register system logs, and Grafana to display dashboards that are easier to read and customize.
+
 
 ## 📉 Limitations
 When adding a ticket, multiple entries representing airlines and the relation of tickets and airlines are created. This is done via BigQuery streaming buffers. The problem with this implementation is that the data is  persisted in the tables 90 minutes after the insertion operation, making it only possible to read them and impossible to perform other operations (like deleting) until the data is persisted. <br>
 <br><br>
-There are some endpoints that require authentication to work (The endpoints from the recommendation and the management services). We aimed to present the user with a login page when he tries to access these endpoints, being redirected (with his token obtained from the login) to the endpoint he initially tried to access. Instead, the user must access the authentication service and perform the login through there, which grants him with a cookie with the required permissions to access the intended endpoints (provided he has the permission to access them).
+There are some endpoints that require authentication to work (The endpoints from the recommendation). We aimed to present the user with a login page when he tries to access these endpoints, being redirected (with his token obtained from the login) to the endpoint he initially tried to access. Instead, the user must access the authentication service and perform the login through there, which grants him with a cookie with the required permissions to access the intended endpoints (provided he has the permission to access them).
 <br> 
-Spark isn't configured as wished. The requests regarding machine learning models aren't being ran parallely in a spark environment.
+Spark isn't configured as wished. The requests regarding machine learning models aren't being ran parallely in a spark cluster environment.
 
 
 
