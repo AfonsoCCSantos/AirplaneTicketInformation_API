@@ -23,7 +23,7 @@ gcloud config set project $PROJECT_ID
 
 
 gcloud container clusters create cn19-cluster --region=europe-west4 \
-    --node-locations europe-west4-a \
+    --node-locations europe-west4-b \
     --num-nodes=5 \
     --machine-type=custom-1-2048 # com 5 nodes 1 vcpu e 2 de mem per node
 
