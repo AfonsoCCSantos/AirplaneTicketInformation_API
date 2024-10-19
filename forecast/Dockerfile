@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
 RUN apt update
 RUN apt install -y openjdk-17-jdk
