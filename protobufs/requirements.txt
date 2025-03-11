@@ -1,2 +1,4 @@
 grpc-interceptor ~= 0.11.0
 grpcio-tools ~= 1.30
+grpcio>=1.53.2 # not directly required, pinned by Snyk to avoid a vulnerability
+protobuf>=3.18.3 # not directly required, pinned by Snyk to avoid a vulnerability
