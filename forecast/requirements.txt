@@ -6,3 +6,4 @@ prometheus_client
 psutil
 numpy
 pyspark
+werkzeug>=3.1.5 # not directly required, pinned by Snyk to avoid a vulnerability
