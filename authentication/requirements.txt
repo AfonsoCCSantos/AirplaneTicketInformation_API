@@ -6,3 +6,4 @@ requests
 python-dotenv>=0.19.2
 prometheus_client
 psutil
+protobuf>=6.33.5 # not directly required, pinned by Snyk to avoid a vulnerability
